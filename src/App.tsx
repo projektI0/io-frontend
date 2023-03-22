@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import Map from "./components/Map";
 import UserProfile from "./components/UserProfile";
 
-function App() {
+const App = () => {
     return (
         <BrowserRouter>
             <div className="App font-body grid md:grid-cols-4">
@@ -21,6 +21,6 @@ function App() {
             </div>
         </BrowserRouter>
     );
-}
+};
 
 export default App;

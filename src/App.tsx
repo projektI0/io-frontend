@@ -3,20 +3,66 @@ import Navbar from "./components/Navbar";
 import NotFound from "./components/NotFound";
 import ShoppingList from "./components/ShoppingList";
 import Home from "./components/Home";
-import Map from "./components/Map";
+import ShopsMap from "./components/ShopsMap/ShopsMap";
 import UserProfile from "./components/UserProfile";
 import LoginForm from "./components/Auth/Form/LoginForm";
 import RegisterForm from "./components/Auth/Form/RegisterForm";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useEffect, useState } from "react";
+import { LatLng } from "leaflet";
 
 const App = () => {
+    const [userLocation, setUserLocation] = useState<LatLng|null>(null);
+
+    const updateUserLocation = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setUserLocation(new LatLng(position.coords.latitude, position.coords.longitude));
+            },
+            (error) => {
+                setUserLocation(null);
+            }
+        );
+
+        navigator.geolocation.watchPosition (
+            (position) => {
+                setUserLocation(new LatLng(position.coords.latitude, position.coords.longitude));
+            },
+            (error) => {
+                setUserLocation(null);
+            }
+        );
+      };
+
+    useEffect(() => {        
+        navigator.permissions
+        .query({ name: "geolocation" })
+        .then((permissionStatus) => {
+            if (permissionStatus.state === 'denied') {
+                setUserLocation(null);
+            }
+
+            permissionStatus.onchange = () => {
+                if (permissionStatus.state === 'granted') {
+                    window.location.reload()
+                } else if (permissionStatus.state === 'denied') {
+                    setUserLocation(null);
+                }
+            };
+        });
+
+        if (!userLocation) {
+            updateUserLocation();
+        }
+    }, []);
+
     return (
         <BrowserRouter>
             <div className="App font-body grid md:grid-cols-4">
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/map" element={<ProtectedRoute children={<Map />}/>}/>
+                    <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
                     <Route path="/lists" element={<ProtectedRoute children={<ShoppingList />}/>}/>
                     <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
                     <Route path="/login" element={<LoginForm />} />

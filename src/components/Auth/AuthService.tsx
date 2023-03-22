@@ -50,16 +50,16 @@ export const getCurrentUser = (): User | null => {
   return null;
 };
 
-// We use it while accessing private resources: ex. axios.get(API_URL + "shops", { headers: authHeader() });
-export const authHeader = () => {
+// We use it while accessing private resources: ex. axios.get(API_URL + "shops", { headers: {"Authorization": authHeader()} });
+export const authHeader = (): string => {
   const userStr = localStorage.getItem("user");
   let user = null;
   if (userStr)
     user = JSON.parse(userStr);
 
   if (user && user.jwtToken) {
-    return { Authorization: 'Bearer ' + user.jwtToken };
+    return 'Bearer ' + user.jwtToken;
   } else {
-    return { Authorization: '' };
+    return '';
   }
 }

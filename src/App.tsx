@@ -8,7 +8,7 @@ import Map from "./components/Map";
 function App() {
     return (
         <BrowserRouter>
-            <div className="App">
+            <div className="App font-body">
                 <h1>CD Project Blue</h1>
                 <Navbar />
                 <Routes>

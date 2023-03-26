@@ -515,6 +515,11 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.mx-5{
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
 .mb-6{
   margin-bottom: 1.5rem;
 }
@@ -662,6 +667,14 @@ video {
   font-weight: 600;
 }
 
+.uppercase{
+  text-transform: uppercase;
+}
+
+.lowercase{
+  text-transform: lowercase;
+}
+
 .tracking-wide{
   letter-spacing: 0.025em;
 }
@@ -674,11 +687,6 @@ video {
 .text-primary{
   --tw-text-opacity: 1;
   color: rgb(66 59 200 / var(--tw-text-opacity));
-}
-
-.text-red-700{
-  --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 .text-secondary{

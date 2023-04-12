@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import NotFound from "./components/NotFound";
-import ShoppingList from "./components/ShoppingList";
+import ShoppingList from "./components/Lists/ShoppingList";
 import Home from "./components/Home";
 import ShopsMap from "./components/ShopsMap/ShopsMap";
 import UserProfile from "./components/UserProfile";
@@ -10,6 +10,7 @@ import RegisterForm from "./components/Auth/Form/RegisterForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
+import ShoppingListContainer from "./components/Lists/ShoppingListContainer";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng|null>(null);
@@ -63,7 +64,8 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
-                    <Route path="/lists" element={<ProtectedRoute children={<ShoppingList />}/>}/>
+                    <Route path="/current-list" element={<ProtectedRoute children={<ShoppingList />}/>}/>
+                    <Route path="/lists" element={<ProtectedRoute children={<ShoppingListContainer />}/>}/>
                     <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />

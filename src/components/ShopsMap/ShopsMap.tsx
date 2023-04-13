@@ -13,7 +13,7 @@ const ShopsMap = ({userLocation} : {userLocation: LatLng | null}) => {
     };
 
     return (
-        <div className="container md:col-span-3 flex flex-col">
+        <div className="container md:col-span-4 flex flex-col">
             <MapContainer 
                 className="map"
                 center={userLocation} 

@@ -11,7 +11,7 @@ const ShoppingList = () => {
     }
 
     return (
-        <div className="md:col-span-3 flex flex-col items-center">
+        <div className="md:col-span-4 flex flex-col items-center">
             <h1 className="p-10 text-3xl text-primary font-bold">
                 List: <span className={"font-medium"}>{listName}</span>
             </h1>
@@ -19,7 +19,10 @@ const ShoppingList = () => {
                 {listItems.map((item) => {
                     return (<li key={item}
                                 className={"flex justify-between items-center text-lg px-4 py-1 m-2 bg-violet-100 rounded-md"}>
-                        {item}
+                        <div>
+                            <input type={"checkbox"} className={"mr-4 w-4 h-4"}/>
+                            {item}
+                        </div>
                         <button className="bg-primary text-white rounded-md px-4 py-2 m-1"
                                 onClick={() => handleRemoveItem(item)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}

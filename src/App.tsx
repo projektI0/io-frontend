@@ -59,7 +59,7 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <div className="App font-body grid md:grid-cols-4">
+            <div className="App font-body grid md:grid-cols-5">
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />

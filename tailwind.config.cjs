@@ -10,7 +10,7 @@ module.exports = {
                 bright: "#f1f1f2",
             },
             fontFamily: {
-                body: ["Inter"],
+                body: ["Poppins"],
             },
         },
     },

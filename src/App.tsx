@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import NotFound from "./components/NotFound";
-import ShoppingList from "./components/Lists/ShoppingList";
+import ShoppingList from "./components/lists/ShoppingList";
 import Home from "./components/Home";
-import ShopsMap from "./components/ShopsMap/ShopsMap";
+import ShopsMap from "./components/map/ShopsMap";
 import UserProfile from "./components/UserProfile";
-import LoginForm from "./components/Auth/Form/LoginForm";
-import RegisterForm from "./components/Auth/Form/RegisterForm";
+import LoginForm from "./components/auth/Form/LoginForm";
+import RegisterForm from "./components/auth/Form/RegisterForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
-import ShoppingListContainer from "./components/Lists/ShoppingListContainer";
+import ShoppingListContainer from "./components/lists/ShoppingListContainer";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng|null>(null);

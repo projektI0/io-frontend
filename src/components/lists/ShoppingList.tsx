@@ -1,14 +1,20 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useAppSelector} from "../../hooks/hooks";
 
 const ShoppingList = () => {
-    const listName = "Groceries"
-    const [listItems, setListItems] = useState([
-        "banana", "apple", "orange", "pear", "lemon", "lime"
-    ])
+    const listName = useAppSelector((state) => state.currentList.listName)
+    const listItemsRef = useAppSelector(state => state.currentList.listItems)
+
+    const [listItems, setListItems] = useState([""])
 
     const handleRemoveItem = (itemName: string) => {
         setListItems(listItems.filter((item) => item !== itemName));
     }
+
+    useEffect(() => {
+        setListItems(listItemsRef)
+    }, [listItemsRef]);
+
 
     return (
         <div className="md:col-span-4 flex flex-col items-center">

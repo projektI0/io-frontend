@@ -1,6 +1,6 @@
 import {Link, NavigateFunction, useNavigate} from "react-router-dom";
-import {getCurrentUser, logout} from "./Auth/AuthService";
-import {User} from "./Auth/types/types";
+import {getCurrentUser, logout} from "./auth/AuthService";
+import {User} from "./auth/types/types";
 
 const Navbar = () => {
     let navigate: NavigateFunction = useNavigate();

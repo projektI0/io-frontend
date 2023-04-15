@@ -7,15 +7,17 @@ interface List {
 
 interface ListsState {
     activeList: string;
+    activeListItems: string[];
     lists: List[];
 }
 
 const initialStateValue: ListsState = {
     activeList: "Groceries",
+    activeListItems: [],
     lists: [
         {listName: "Groceries", listItems: ["Item 1", "Item 2", "Item 3"]},
-        {listName: "Clothes", listItems: ["Item 1", "Item 2", "Item 3"]},
-        {listName: "Electronics", listItems: ["Item 1", "Item 2", "Item 3"]},
+        {listName: "Clothes", listItems: ["Item 4", "Item 5", "Item 6"]},
+        {listName: "Electronics", listItems: ["Item 7", "Item 8", "Item 9"]},
     ]
 };
 
@@ -29,13 +31,16 @@ export const listsSlice = createSlice({
         removeList: (state, action) => {
             state.lists = state.lists.filter(list => list.listName !== action.payload)
         },
-        setListNameItems(state, action) {
-            // Rename list and change items
-            const {listName, listItems} = action.payload;
-            const list = state.lists.find(list => list.listName === listName);
-            if (list) {
-                list.listName = listName;
-                list.listItems = listItems;
+        setActiveListName: (state, action) => {
+            state.activeList = action.payload
+        },
+        setActiveListItems: (state, action) => {
+            state.activeListItems = action.payload;
+        },
+        removeActiveListItem: (state, action) => {
+            const activeList = state.lists.find(list => list.listName === state.activeList);
+            if (activeList) {
+                activeList.listItems = activeList.listItems.filter(item => item !== action.payload)
             }
         },
         setCurrentList: (state, action) => {
@@ -47,16 +52,17 @@ export const listsSlice = createSlice({
             if (listToRename) {
                 listToRename.listName = newName;
             }
-        },
-        removeListItem: (state, action) => {
-            const {listName, itemName} = action.payload;
-            const list = state.lists.find(list => list.listName === listName);
-            if (list) {
-                list.listItems = list.listItems.filter(item => item !== itemName);
-            }
         }
     }
 });
 
-export const {addList, removeList, setCurrentList, renameList} = listsSlice.actions;
+export const {
+    addList,
+    removeList,
+    setCurrentList,
+    renameList,
+    setActiveListName,
+    setActiveListItems,
+    removeActiveListItem
+} = listsSlice.actions;
 export default listsSlice.reducer;

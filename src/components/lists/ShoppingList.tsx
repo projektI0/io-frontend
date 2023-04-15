@@ -1,21 +1,27 @@
 import {useEffect, useState} from "react";
-import {useAppSelector} from "../../hooks/hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
+import {removeActiveListItem} from "../store/listsSlice";
+import EmptyListMessage from "./EmptyListMessage";
 
 const ShoppingList = () => {
-    let listName = useAppSelector((state) => state.currentList.listName)
-    const listItemsRef = useAppSelector(state => state.currentList.listItems)
+    const dispatch = useAppDispatch()
 
-    const [listItems, setListItems] = useState([""])
+    const listNameRef = useAppSelector((state) => state.lists.activeList)
+    const listItemsRef = useAppSelector(state => state.lists.activeListItems)
+
+    const [listName, setListName] = useState("No list selected")
+    const [listItems, setListItems] = useState([] as string[])
 
     const handleRemoveItem = (itemName: string) => {
+        dispatch(removeActiveListItem(itemName))
         setListItems(listItems.filter((item) => item !== itemName));
     }
 
     useEffect(() => {
-        if (listItemsRef === undefined) {
-            listName = "No list selected"
+        if (listItemsRef === undefined || listItemsRef.length === 0) {
             setListItems([])
         } else {
+            setListName(listNameRef)
             setListItems(listItemsRef)
         }
     }, [listItemsRef]);
@@ -27,6 +33,7 @@ const ShoppingList = () => {
                 List: <span className={"font-medium"}>{listName}</span>
             </h1>
             <ul className={"flex flex-col w-2/4 "}>
+                {listItems.length === 0 && <EmptyListMessage />}
                 {listItems.map((item) => {
                     return (<li key={item}
                                 className={"flex justify-between items-center text-lg px-4 py-1 m-2 bg-violet-100 rounded-md"}>

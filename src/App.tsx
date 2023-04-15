@@ -7,7 +7,7 @@ import ShopsMap from "./components/map/ShopsMap";
 import UserProfile from "./components/UserProfile";
 import LoginForm from "./components/auth/Form/LoginForm";
 import RegisterForm from "./components/auth/Form/RegisterForm";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
 import ShoppingListContainer from "./components/lists/ShoppingListContainer";

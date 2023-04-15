@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useAppSelector} from "../../hooks/hooks";
 
 const ShoppingList = () => {
-    const listName = useAppSelector((state) => state.currentList.listName)
+    let listName = useAppSelector((state) => state.currentList.listName)
     const listItemsRef = useAppSelector(state => state.currentList.listItems)
 
     const [listItems, setListItems] = useState([""])
@@ -12,7 +12,12 @@ const ShoppingList = () => {
     }
 
     useEffect(() => {
-        setListItems(listItemsRef)
+        if (listItemsRef === undefined) {
+            listName = "No list selected"
+            setListItems([])
+        } else {
+            setListItems(listItemsRef)
+        }
     }, [listItemsRef]);
 
 

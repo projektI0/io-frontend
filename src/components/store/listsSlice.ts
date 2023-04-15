@@ -33,12 +33,11 @@ export const listsSlice = createSlice({
             state.activeList = action.payload
         },
         renameList: (state, action) => {
-            state.lists = state.lists.map(list => {
-                if (list.listName === action.payload.oldListName) {
-                    list.listName = action.payload.newListName
-                }
-                return list
-            })
+            const {oldName, newName} = action.payload;
+            const listToRename = state.lists.find(list => list.listName === oldName);
+            if (listToRename) {
+                listToRename.listName = newName;
+            }
         }
     }
 });

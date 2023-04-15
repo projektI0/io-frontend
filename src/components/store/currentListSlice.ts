@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const initialStateValue = {listName: "No list selected", listItems: [""]};
+const initialStateValue = {listName: "No list selected", listItems: []};
 
 export const currentListSlice = createSlice({
     name: "currentList",

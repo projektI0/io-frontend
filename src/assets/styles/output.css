@@ -646,6 +646,10 @@ video {
   display: grid;
 }
 
+.hidden{
+  display: none;
+}
+
 .h-12{
   height: 3rem;
 }
@@ -1000,6 +1004,14 @@ video {
 
 .opacity-5{
   opacity: 0.05;
+}
+
+.opacity-50{
+  opacity: 0.5;
+}
+
+.opacity-75{
+  opacity: 0.75;
 }
 
 .shadow{

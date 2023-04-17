@@ -8,12 +8,14 @@ interface List {
 interface ListsState {
     activeList: string;
     activeListItems: string[];
+    newListName: string;
     lists: List[];
 }
 
 const initialStateValue: ListsState = {
     activeList: "Groceries",
     activeListItems: [],
+    newListName: "",
     lists: [
         {listName: "Groceries", listItems: ["Item 1", "Item 2", "Item 3"]},
         {listName: "Clothes", listItems: ["Item 4", "Item 5", "Item 6"]},
@@ -52,6 +54,9 @@ export const listsSlice = createSlice({
             if (listToRename) {
                 listToRename.listName = newName;
             }
+        },
+        updateNewListName: (state, action) => {
+            state.newListName = action.payload;
         }
     }
 });
@@ -63,6 +68,7 @@ export const {
     renameList,
     setActiveListName,
     setActiveListItems,
-    removeActiveListItem
+    removeActiveListItem,
+    updateNewListName
 } = listsSlice.actions;
 export default listsSlice.reducer;

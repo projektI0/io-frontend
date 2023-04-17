@@ -42,9 +42,10 @@ const AddList = () => {
                           d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </button>
-            {showModal ? (
+            {showModal &&
                 <>
-                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                    <div
+                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
                             {/*content*/}
                             <div
@@ -91,14 +92,15 @@ const AddList = () => {
                                     >
                                         Save Changes
                                     </button>
-                                    <Tooltip id="new-list-name" className={`${inputValue.length >= MIN_LIST_NAME_LENGTH ? "hidden" : ""}`}/>
+                                    <Tooltip id="new-list-name"
+                                             className={`${inputValue.length >= MIN_LIST_NAME_LENGTH ? "hidden" : ""}`}/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="opacity-25 fixed inset-0 z-40 bg-black"/>
                 </>
-            ) : null}
+            }
         </div>
     );
 };

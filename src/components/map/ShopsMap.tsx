@@ -6,11 +6,11 @@ import { LatLng } from "leaflet";
 const ShopsMap = ({userLocation} : {userLocation: LatLng | null}) => {
     if (!userLocation) {
         return (
-            <div className="error-message container md:col-span-3 flex flex-col">
+            <div className="error-message container md:col-span-4 flex flex-col">
                 <h1>The site requires access to your location.</h1>
             </div>
         );
-    };
+    }
 
     return (
         <div className="container md:col-span-4 flex flex-col">

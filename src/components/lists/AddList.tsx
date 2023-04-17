@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {addList} from "../store/listsSlice";
+import {addList} from "../../store/listsSlice";
 import {useAppDispatch} from "../../hooks/hooks";
+import {MIN_LIST_NAME_LENGTH} from "../../constants/Constants";
+import {Tooltip} from "react-tooltip";
 
 const AddList = () => {
     const dispatch = useAppDispatch()
@@ -9,10 +11,15 @@ const AddList = () => {
     const [inputValue, setInputValue] = useState("");
 
     const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setInputValue(event.target.value);
+        setInputValue(event.target.value)
     };
 
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
     const handleAddNewList = () => {
+        setShowModal(false)
         dispatch(addList({listName: inputValue, listItems: ["Test item"]}))
     }
 
@@ -24,17 +31,20 @@ const AddList = () => {
                 onClick={() => setShowModal(true)}
             >
                 <span className={"px-2"}>New list</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                     stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round"
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     strokeWidth={1.5}
+                     stroke="currentColor"
+                     className="w-6 h-6">
+                    <path strokeLinecap="round"
+                          strokeLinejoin="round"
                           d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </button>
             {showModal ? (
                 <>
-                    <div
-                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                    >
+                    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
                             {/*content*/}
                             <div
@@ -47,7 +57,7 @@ const AddList = () => {
                                     </h3>
                                     <button
                                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                        onClick={() => setShowModal(false)}
+                                        onClick={() => handleCloseModal()}
                                     >
                                     </button>
                                 </div>
@@ -64,25 +74,29 @@ const AddList = () => {
                                     <button
                                         className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                         type="button"
-                                        onClick={() => setShowModal(false)}
+                                        onClick={() => handleCloseModal()}
                                     >
                                         Close
                                     </button>
                                     <button
-                                        className="bg-primary text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                        className={`${inputValue.length < MIN_LIST_NAME_LENGTH ? "opacity-75" : ""} bg-primary text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
+                                        data-tooltip-id="new-list-name"
+                                        data-tooltip-content="New list name must be at least 3 characters long"
+                                        data-tooltip-place="top"
                                         type="submit"
+                                        disabled={inputValue.length < MIN_LIST_NAME_LENGTH}
                                         onClick={() => {
-                                            setShowModal(false)
                                             handleAddNewList()
                                         }}
                                     >
                                         Save Changes
                                     </button>
+                                    <Tooltip id="new-list-name" className={`${inputValue.length >= MIN_LIST_NAME_LENGTH ? "hidden" : ""}`}/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    <div className="opacity-25 fixed inset-0 z-40 bg-black"/>
                 </>
             ) : null}
         </div>

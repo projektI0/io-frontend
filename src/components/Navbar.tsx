@@ -8,8 +8,8 @@ const Navbar = () => {
     const user: User | null = getCurrentUser();
 
     return (
-        <nav className="bg-primary text-bright h-screen md:col-span-1 flex min-w-fit">
-            <div className="w-full flex flex-col justify-between">
+        <nav className="bg-primary text-bright h-screen flex">
+            <div className="w-full flex flex-col justify-between md:col-span-1 ">
                 <div className="mb-6 text-2xl">
                     <div className="pl-4 py-4 pb-10 flex items-center">
                         <svg

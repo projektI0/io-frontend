@@ -112,6 +112,19 @@ const Navbar = () => {
                                 <p className="pl-2">My lists</p>
                             </Link>
                         }
+                                                {user && user.roles.includes("USER") &&
+                            <Link
+                                to="/new-shop-form"
+                                className="flex items-center p-4 hover:bg-secondary_dark cursor-pointer"
+                            >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} className="text-secondary w-8 h-8">
+                                <circle cx="10" cy="20.5" r="1"/><circle cx="18" cy="20.5" r="1"/>
+                                <path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6l1.6-8.4H7.1"/>
+                            </svg>
+
+                                <p className="pl-2">Add new shop</p>
+                            </Link>
+                        }
                     </div>
                 </div>
                 <div className="flex items-center p border-t">

@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
 import ShoppingLists from "./components/lists/ShoppingLists";
+import ShopForm from "./components/ShopForm/ShopForm";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng|null>(null);
@@ -66,6 +67,8 @@ const App = () => {
                     <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
                     <Route path="/current-list" element={<ProtectedRoute children={<CurrentShoppingList />}/>}/>
                     <Route path="/lists" element={<ProtectedRoute children={<ShoppingLists />}/>}/>
+                    <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
+                    <Route path="/new-shop-form" element={<ProtectedRoute children={<ShopForm />}/>}/>
                     <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />

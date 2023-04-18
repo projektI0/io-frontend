@@ -112,7 +112,20 @@ const Navbar = () => {
                                 <p className="pl-2">My lists</p>
                             </Link>
                         }
-                                                {user && user.roles.includes("USER") &&
+                        {user && user.roles.includes("USER") &&
+                            <Link
+                                to="/new-product-form"
+                                className="flex items-center p-4 hover:bg-secondary_dark cursor-pointer"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                                   strokeWidth={1.5} stroke="currentColor" className="text-secondary w-8 h-8">
+                                    <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6zM3.8 6h16.4M16 10a4 4 0 1 1-8 0"/>
+                                </svg>
+
+                                <p className="pl-2">Add new product</p>
+                            </Link>
+                        }
+                        {user && user.roles.includes("USER") &&
                             <Link
                                 to="/new-shop-form"
                                 className="flex items-center p-4 hover:bg-secondary_dark cursor-pointer"

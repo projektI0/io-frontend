@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
 import ShoppingLists from "./components/lists/ShoppingLists";
 import ShopForm from "./components/ShopForm/ShopForm";
+import ProductForm from "./components/ProductForm/ProductForm";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng|null>(null);
@@ -67,12 +68,12 @@ const App = () => {
                     <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
                     <Route path="/current-list" element={<ProtectedRoute children={<CurrentShoppingList />}/>}/>
                     <Route path="/lists" element={<ProtectedRoute children={<ShoppingLists />}/>}/>
-                    <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
                     <Route path="/new-shop-form" element={<ProtectedRoute children={<ShopForm />}/>}/>
+                    <Route path="/new-product-form" element={<ProtectedRoute children={<ProductForm />}/>}/>
                     <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/register" element={<RegisterForm />} />
-                    <Route path="*" element={<NotFound />} />
+                    <Route path="/login" element={<LoginForm />}/>
+                    <Route path="/register" element={<RegisterForm />}/>
+                    <Route path="*" element={<NotFound />}/>
                 </Routes>
             </div>
         </BrowserRouter>

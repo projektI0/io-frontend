@@ -1,28 +1,18 @@
 import React from 'react';
-import {removeList} from "../../store/listsSlice";
-import {useAppDispatch} from "../../hooks/hooks";
-import {useDeleteShoppingListMutation} from "../../api/apiLists";
+import {ShoppingList} from "./types";
 
 type RemoveListProps = {
-    index: number
-    listName: string
+    onRemoveList: (list: ShoppingList) => void,
+    list: ShoppingList
 }
 
 const RemoveList = (props: RemoveListProps) => {
-    const [deleteShoppingList, {isLoading, isSuccess, isError, error}] = useDeleteShoppingListMutation({})
-
-    const dispatch = useAppDispatch()
-
-    const handleRemoveList = async (index: number, listName: string) => {
-        await deleteShoppingList(index)
-        dispatch(removeList(listName))
-    };
 
     return (
         <div>
             <button
                 className="bg-primary text-white rounded-md px-4 py-2 m-1"
-                onClick={() => handleRemoveList(props.index, props.listName)}
+                onClick={() => props.onRemoveList(props.list)}
             >
                 <svg xmlns="http://www.w3.org/2000/svg"
                      fill="none"

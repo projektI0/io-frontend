@@ -1,53 +1,53 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
-import {removeActiveListItem} from "../../store/listsSlice";
 import EmptyListMessage from "./EmptyListMessage";
-import {useGetShoppingListItemsQuery} from "../../api/apiListItems";
+import {useDeleteShoppingListProductMutation, useGetShoppingListWithProductsQuery} from "../../api/apiProducts";
+import {ShoppingListProduct} from "../products/types";
+import {removeProduct, setActiveProducts} from "../../store/listsSlice";
 
-const CurrentShoppingList = () => {
+const ActiveShoppingList = () => {
     const dispatch = useAppDispatch()
-    const listIndexRef = useAppSelector(state => state.lists.activeListIndex)
-    const [listItems, setListItems] = useState<string[]>([])
+    const activeListId = useAppSelector(state => state.lists.activeList?.id ?? -1)
+    const activeProducts = useAppSelector(state => state.lists.activeProducts)
 
-    const {
-        data: currentListData,
-        isLoading: currentListIsLoading,
-        isSuccess: currentListIsSuccess,
-    } = useGetShoppingListItemsQuery(listIndexRef);
+    const {data: list, isSuccess: listIsSuccess} = useGetShoppingListWithProductsQuery(activeListId, {
+        skip: activeListId < 0
+    });
+    const [removeShoppingListItem] = useDeleteShoppingListProductMutation()
 
-    let fetchedListItems: string[] = []
-    if (currentListIsSuccess) {
-        fetchedListItems = currentListData.products.map((item: { name: string; }) => item.name)
-        // TODO: There is no way to add products to the list yet, so to see the list items, uncomment the following line:
-        // fetchedListItems = ["Apples", "Oranges", "Kiwi"]
-    }
-
-    const handleRemoveItem = (itemName: string) => {
-        dispatch(removeActiveListItem(itemName))
-        setListItems(listItems.filter((item) => item !== itemName));
-    }
+    const [listProducts, setListProducts] = useState<ShoppingListProduct[]>([])
 
     useEffect(() => {
-        setListItems(fetchedListItems)
-    }, [listItems, fetchedListItems]);
+        if (!listIsSuccess) {
+            return
+        }
+        setListProducts(list.products)
+        dispatch(setActiveProducts(list.products))
+    }, [listIsSuccess, list]);
 
+    const handleRemoveItem = async (item: ShoppingListProduct) => {
+        await removeShoppingListItem({
+            listId: activeListId,
+            productId: item.product.product.id
+        })
+        dispatch(removeProduct(item))
+        setListProducts(activeProducts)
+    }
 
     return (
         <div className="md:col-span-4 flex flex-col items-center">
             <h1 className="p-10 text-3xl text-primary font-bold">
-                Current list
+                Active list
             </h1>
             <ul className={"flex flex-col w-2/4 "}>
-                {listItems.length === 0 ? (
+                {listProducts.length === 0 ? (
                     <EmptyListMessage/>
                 ) : (
-                    listItems.map((item) =>
-                        (<li key={item}
+                    listProducts.map((item) =>
+                        (<li key={item.product.product.id}
                              className={"flex justify-between items-center text-lg px-4 py-1 m-1 bg-violet-100 rounded-md"}>
                                 <div>
-                                    <input type={"checkbox"}
-                                           className={"mr-4 w-4 h-4"}/>
-                                    {item}
+                                    {item.product.product.name}
                                 </div>
                                 <button className="bg-primary text-white rounded-md px-4 py-2 m-1"
                                         onClick={() => handleRemoveItem(item)}
@@ -72,4 +72,4 @@ const CurrentShoppingList = () => {
     );
 };
 
-export default CurrentShoppingList;
+export default ActiveShoppingList;

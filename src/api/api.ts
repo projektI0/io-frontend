@@ -10,9 +10,6 @@ export const api = createApi({
             return headers;
         }
     }),
-    tagTypes: ['ShoppingLists'],
+    tagTypes: ['ShoppingLists', 'ProductList', 'ActiveShoppingList'],
     endpoints: () => ({})
 })
-
-export const {
-} = api

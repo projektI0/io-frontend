@@ -10,11 +10,10 @@ Frontend repository from IO 2023 class at AGH UST.
 ### Definition Of Done
 
 - Implemented
-- Tested
 - Reviewed
 - Meets Acceptance Criteria
 - Merged to development branch (with rebase)
-- Presented to client (if possible)
+- Discussed with PO
 
 ## Getting Started
 

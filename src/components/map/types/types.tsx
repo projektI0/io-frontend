@@ -7,7 +7,7 @@ export interface Tag {
     id: number;
     name: string;
     parentTagId?: string;
-};
+}
 
 export interface Shop {
     id: number;
@@ -15,7 +15,8 @@ export interface Shop {
     latitude: number;
     longitude: number;
     address: string;
-};
+    tags: Tag[];
+}
 
 export enum ShowStopsText {
     Show = "Show Stops",

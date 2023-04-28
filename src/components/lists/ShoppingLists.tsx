@@ -1,20 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
-import {renameList, setActiveListItems, setActiveListName, setCurrentList} from "../../store/listsSlice";
+import {
+    renameList,
+    setActiveListItems,
+    setActiveListName,
+    setCurrentList,
+    setCurrentListIndex
+} from "../../store/listsSlice";
 import AddList from "./AddList";
 import RemoveList from "./RemoveList";
 import {Tooltip} from "react-tooltip"
 import {Link} from "react-router-dom";
 import EditList from "./EditList";
-import {useGetShoppingListsQuery} from "../../api/apiSlice";
+import {useGetShoppingListsQuery, useUpdateShoppingListMutation} from "../../api/apiLists";
 
 const ShoppingLists = () => {
     const {
         data: shoppingListsData,
-        isLoading: shoppingListsIsLoading,
         isSuccess: shoppingListsIsSuccess,
-        isError: shoppingListsIsError,
-        error: shoppingListsError
     } = useGetShoppingListsQuery({});
 
     let fetchedLists: { id: number, name: string }[] = []
@@ -24,6 +27,8 @@ const ShoppingLists = () => {
             id: list.id, name: list.name
         }))
     }
+
+    const [updateShoppingList, { isLoading: updateShoppingListIsLoading }] = useUpdateShoppingListMutation()
 
     const dispatch = useAppDispatch()
 
@@ -37,7 +42,9 @@ const ShoppingLists = () => {
     const [activeListIndex, setActiveListIndex] = useState<number>(0)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
 
-    const handleEditList = () => {
+    const handleEditList = async () => {
+        const listId = findListIndex(shoppingLists[activeListIndex])
+        await updateShoppingList({ id: listId, payload: editInputValue })
         dispatch(renameList({oldName: shoppingLists[activeListIndex], newName: editInputValue}))
         dispatch(setCurrentList(shoppingLists[activeListIndex]))
         setShoppingLists(shoppingListsRef)
@@ -55,6 +62,7 @@ const ShoppingLists = () => {
         setShoppingLists(fetchedLists.map((list) => list.name))
         setShoppingListsItems(shoppingListsItemsRef)
         setActiveListIndex(shoppingLists.indexOf(currentListRef))
+        dispatch(setCurrentListIndex(fetchedLists.find(list => list.name === currentListRef)?.id))
         dispatch(setActiveListItems(shoppingListsItems[activeListIndex]))
     }, [shoppingLists, shoppingListsItems, activeListIndex]);
 

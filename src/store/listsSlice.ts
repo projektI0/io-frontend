@@ -7,6 +7,7 @@ interface List {
 
 interface ListsState {
     activeList: string;
+    activeListIndex: number;
     activeListItems: string[];
     newListName: string;
     lists: List[];
@@ -14,6 +15,7 @@ interface ListsState {
 
 const initialStateValue: ListsState = {
     activeList: "Groceries",
+    activeListIndex: 0,
     activeListItems: [],
     newListName: "",
     lists: [
@@ -35,6 +37,9 @@ export const listsSlice = createSlice({
         },
         setActiveListName: (state, action) => {
             state.activeList = action.payload
+        },
+        setCurrentListIndex: (state, action) => {
+            state.activeListIndex = action.payload
         },
         setActiveListItems: (state, action) => {
             state.activeListItems = action.payload;
@@ -67,6 +72,7 @@ export const {
     setCurrentList,
     renameList,
     setActiveListName,
+    setCurrentListIndex,
     setActiveListItems,
     removeActiveListItem,
     updateNewListName

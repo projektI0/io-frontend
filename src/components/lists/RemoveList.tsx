@@ -1,7 +1,7 @@
 import React from 'react';
 import {removeList} from "../../store/listsSlice";
 import {useAppDispatch} from "../../hooks/hooks";
-import {useDeleteShoppingListMutation} from "../../api/apiSlice";
+import {useDeleteShoppingListMutation} from "../../api/apiLists";
 
 type RemoveListProps = {
     index: number

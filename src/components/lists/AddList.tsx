@@ -3,7 +3,7 @@ import {addList} from "../../store/listsSlice";
 import {useAppDispatch} from "../../hooks/hooks";
 import {MIN_LIST_NAME_LENGTH} from "../../constants/Constants";
 import {Tooltip} from "react-tooltip";
-import {useAddNewShoppingListMutation} from "../../api/apiSlice";
+import {useAddNewShoppingListMutation} from "../../api/apiLists";
 
 const AddList = () => {
     const [addNewShoppingList, {isLoading}] = useAddNewShoppingListMutation()

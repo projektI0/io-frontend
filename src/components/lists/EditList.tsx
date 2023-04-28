@@ -3,6 +3,7 @@ import {MIN_LIST_NAME_LENGTH} from "../../constants/Constants";
 import {Tooltip} from "react-tooltip";
 import {useAppDispatch} from "../../hooks/hooks";
 import {updateNewListName} from "../../store/listsSlice";
+import {useUpdateShoppingListMutation} from "../../api/apiLists";
 
 type EditListProps = {
     onEditList: () => void,
@@ -10,6 +11,7 @@ type EditListProps = {
 }
 
 const EditList = (props : EditListProps) => {
+    const [updateListName, {isLoading}] = useUpdateShoppingListMutation({})
     const dispatch = useAppDispatch()
     const [editInputValue, setEditInputValue] = useState<string>("")
 

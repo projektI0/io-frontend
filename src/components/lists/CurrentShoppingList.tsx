@@ -2,15 +2,25 @@ import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 import {removeActiveListItem} from "../../store/listsSlice";
 import EmptyListMessage from "./EmptyListMessage";
+import {useGetShoppingListItemsQuery} from "../../api/apiListItems";
 
 const CurrentShoppingList = () => {
     const dispatch = useAppDispatch()
-
-    const listNameRef = useAppSelector((state) => state.lists.activeList)
-    const listItemsRef = useAppSelector(state => state.lists.activeListItems)
-
-    const [listName, setListName] = useState("No list selected")
+    const listIndexRef = useAppSelector(state => state.lists.activeListIndex)
     const [listItems, setListItems] = useState<string[]>([])
+
+    const {
+        data: currentListData,
+        isLoading: currentListIsLoading,
+        isSuccess: currentListIsSuccess,
+    } = useGetShoppingListItemsQuery(listIndexRef);
+
+    let fetchedListItems: string[] = []
+    if (currentListIsSuccess) {
+        fetchedListItems = currentListData.products.map((item: { name: string; }) => item.name)
+        // TODO: There is no way to add products to the list yet, so to see the list items, uncomment the following line:
+        // fetchedListItems = ["Apples", "Oranges", "Kiwi"]
+    }
 
     const handleRemoveItem = (itemName: string) => {
         dispatch(removeActiveListItem(itemName))
@@ -18,19 +28,14 @@ const CurrentShoppingList = () => {
     }
 
     useEffect(() => {
-        if (listItemsRef === undefined || listItemsRef.length === 0) {
-            setListItems([])
-        } else {
-            setListName(listNameRef)
-            setListItems(listItemsRef)
-        }
-    }, [listItemsRef]);
+        setListItems(fetchedListItems)
+    }, [listItems, fetchedListItems]);
 
 
     return (
         <div className="md:col-span-4 flex flex-col items-center">
             <h1 className="p-10 text-3xl text-primary font-bold">
-                List: <span className={"font-medium"}>{listName}</span>
+                Current list
             </h1>
             <ul className={"flex flex-col w-2/4 "}>
                 {listItems.length === 0 ? (
@@ -38,7 +43,7 @@ const CurrentShoppingList = () => {
                 ) : (
                     listItems.map((item) =>
                         (<li key={item}
-                             className={"flex justify-between items-center text-lg px-4 py-1 m-2 bg-violet-100 rounded-md"}>
+                             className={"flex justify-between items-center text-lg px-4 py-1 m-1 bg-violet-100 rounded-md"}>
                                 <div>
                                     <input type={"checkbox"}
                                            className={"mr-4 w-4 h-4"}/>

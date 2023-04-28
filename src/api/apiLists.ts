@@ -1,20 +1,9 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {authHeader} from "../components/auth/AuthService";
+import {api} from "./api";
 
-export const apiSlice = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:8080',
-        prepareHeaders: (headers) => {
-            headers.set('Authorization', authHeader());
-            return headers;
-        }
-    }),
-    tagTypes: ['ShoppingLists'],
+export const apiLists = api.injectEndpoints({
     endpoints: (builder) => ({
         getShoppingLists: builder.query({
             query: () => ({
-                // url: '/shops',
                 url: '/shopping-lists/my',
                 method: 'GET',
             }),
@@ -29,11 +18,14 @@ export const apiSlice = createApi({
             invalidatesTags: ['ShoppingLists'],
         }),
         updateShoppingList: builder.mutation({
-            query: (payload) => ({
-                url: `/shopping-lists/${payload.id}`,
-                method: 'PUT',
-                body: payload.body,
-            }),
+            query: (args) => {
+                const {id, payload} = args
+                return {
+                    url: `/shopping-lists/${id}`,
+                    method: 'PUT',
+                    body: payload,
+                }
+            },
             invalidatesTags: ['ShoppingLists'],
         }),
         deleteShoppingList: builder.mutation({
@@ -43,12 +35,12 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['ShoppingLists'],
         }),
-    })
-})
+    }),
+});
 
 export const {
     useGetShoppingListsQuery,
     useAddNewShoppingListMutation,
     useUpdateShoppingListMutation,
     useDeleteShoppingListMutation,
-} = apiSlice
+} = apiLists;

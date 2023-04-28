@@ -34,12 +34,14 @@ export const apiSlice = createApi({
                 method: 'PUT',
                 body: payload.body,
             }),
+            invalidatesTags: ['ShoppingLists'],
         }),
         deleteShoppingList: builder.mutation({
             query: (id) => ({
                 url: `/shopping-lists/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['ShoppingLists'],
         }),
     })
 })

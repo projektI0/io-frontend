@@ -1,15 +1,20 @@
 import React from 'react';
 import {removeList} from "../../store/listsSlice";
 import {useAppDispatch} from "../../hooks/hooks";
+import {useDeleteShoppingListMutation} from "../../api/apiSlice";
 
 type RemoveListProps = {
+    index: number
     listName: string
 }
 
-const RemoveList = ({listName}: RemoveListProps) => {
+const RemoveList = (props: RemoveListProps) => {
+    const [deleteShoppingList, {isLoading, isSuccess, isError, error}] = useDeleteShoppingListMutation({})
+
     const dispatch = useAppDispatch()
 
-    const handleRemoveList = (listName: string) => {
+    const handleRemoveList = async (index: number, listName: string) => {
+        await deleteShoppingList(index)
         dispatch(removeList(listName))
     };
 
@@ -17,7 +22,7 @@ const RemoveList = ({listName}: RemoveListProps) => {
         <div>
             <button
                 className="bg-primary text-white rounded-md px-4 py-2 m-1"
-                onClick={() => handleRemoveList(listName)}
+                onClick={() => handleRemoveList(props.index, props.listName)}
             >
                 <svg xmlns="http://www.w3.org/2000/svg"
                      fill="none"

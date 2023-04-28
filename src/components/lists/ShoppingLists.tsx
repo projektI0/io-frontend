@@ -6,8 +6,32 @@ import RemoveList from "./RemoveList";
 import {Tooltip} from "react-tooltip"
 import {Link} from "react-router-dom";
 import EditList from "./EditList";
+import {useAddNewShoppingListMutation, useGetShoppingListsQuery} from "../../api/apiSlice";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query";
+import {SerializedError} from "@reduxjs/toolkit";
+import axios from "axios";
 
 const ShoppingLists = () => {
+    const {
+        data: shoppingListsData,
+        isLoading: shoppingListsIsLoading,
+        isSuccess: shoppingListsIsSuccess,
+        isError: shoppingListsIsError,
+        error: shoppingListsError
+    } = useGetShoppingListsQuery({});
+
+    let content: JSX.Element | FetchBaseQueryError | SerializedError
+    let result: string[] = []
+
+    if (shoppingListsIsLoading) {
+        content = <div>Loading...</div>
+    } else if (shoppingListsIsSuccess) {
+        content = <div>Success</div>
+        result = shoppingListsData.map((list: any) => list.name)
+    } else if (shoppingListsIsError) {
+        content = shoppingListsError
+    }
+
     const dispatch = useAppDispatch()
 
     const currentListRef = useAppSelector(state => state.lists.activeList)
@@ -27,7 +51,9 @@ const ShoppingLists = () => {
     }
 
     useEffect(() => {
-        setShoppingLists(shoppingListsRef)
+        // if (shoppingListsIsSuccess) setShoppingLists(result)
+        // setShoppingLists(shoppingListsRef)
+        setShoppingLists(result)
         setShoppingListsItems(shoppingListsItemsRef)
         setActiveListIndex(shoppingLists.indexOf(currentListRef))
         dispatch(setActiveListItems(shoppingListsItems[activeListIndex]))
@@ -82,7 +108,7 @@ const ShoppingLists = () => {
                                               d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/>
                                     </svg>
                                 </button>
-                                <RemoveList listName={list}/>
+                                <RemoveList index={index} listName={list}/>
                             </div>
 
                             {showEditModal && <EditList

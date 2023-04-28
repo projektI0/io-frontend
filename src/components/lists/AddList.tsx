@@ -3,8 +3,11 @@ import {addList} from "../../store/listsSlice";
 import {useAppDispatch} from "../../hooks/hooks";
 import {MIN_LIST_NAME_LENGTH} from "../../constants/Constants";
 import {Tooltip} from "react-tooltip";
+import {useAddNewShoppingListMutation} from "../../api/apiSlice";
 
 const AddList = () => {
+    const [addNewShoppingList, {isLoading}] = useAddNewShoppingListMutation()
+
     const dispatch = useAppDispatch()
 
     const [showModal, setShowModal] = useState(false)
@@ -18,8 +21,9 @@ const AddList = () => {
         setShowModal(false)
     }
 
-    const handleAddNewList = () => {
+    const handleAddNewList = async () => {
         setShowModal(false)
+        await addNewShoppingList(inputValue).unwrap()
         dispatch(addList({listName: inputValue, listItems: ["Test item"]}))
     }
 

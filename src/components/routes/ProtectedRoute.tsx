@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getCurrentUser } from './Auth/AuthService';
+import { getCurrentUser } from '../auth/AuthService';
 
 const ProtectedRoute = ({ children } : {children: ReactElement}) => {
     const user = getCurrentUser();

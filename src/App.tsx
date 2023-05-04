@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import NotFound from "./components/NotFound";
-import ShoppingList from "./components/ShoppingList";
+import CurrentShoppingList from "./components/lists/CurrentShoppingList";
 import Home from "./components/Home";
-import ShopsMap from "./components/ShopsMap/ShopsMap";
+import ShopsMap from "./components/map/ShopsMap";
 import UserProfile from "./components/UserProfile";
-import LoginForm from "./components/Auth/Form/LoginForm";
-import RegisterForm from "./components/Auth/Form/RegisterForm";
-import ProtectedRoute from "./components/ProtectedRoute";
+import LoginForm from "./components/auth/Form/LoginForm";
+import RegisterForm from "./components/auth/Form/RegisterForm";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
+import ShoppingLists from "./components/lists/ShoppingLists";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng|null>(null);
@@ -58,12 +59,13 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <div className="App font-body grid md:grid-cols-4">
+            <div className="App font-body grid md:grid-cols-5">
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
-                    <Route path="/lists" element={<ProtectedRoute children={<ShoppingList />}/>}/>
+                    <Route path="/current-list" element={<ProtectedRoute children={<CurrentShoppingList />}/>}/>
+                    <Route path="/lists" element={<ProtectedRoute children={<ShoppingLists />}/>}/>
                     <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />

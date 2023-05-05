@@ -1,4 +1,4 @@
-import { ShopFormData, ShopFormValidationError } from "../types/types";
+import {ShopFormData, ShopFormValidationError} from "../types/types";
 
 export const validateShopFormData = (data: ShopFormData) => {
     const errors: Partial<ShopFormValidationError> = {};

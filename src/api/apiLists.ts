@@ -1,15 +1,23 @@
 import {api} from "./api";
+import {ShoppingList} from "../components/lists/types";
 
 export const apiLists = api.injectEndpoints({
     endpoints: (builder) => ({
-        getShoppingLists: builder.query({
+        getUserShoppingLists: builder.query({
             query: () => ({
                 url: '/shopping-lists/my',
                 method: 'GET',
             }),
             providesTags: ['ShoppingLists'],
         }),
-        addNewShoppingList: builder.mutation({
+        getShoppingList: builder.query({
+            query: (id) => ({
+                url: `/shopping-lists/${id}`,
+                method: 'GET',
+            }),
+            providesTags: ['ShoppingLists'],
+        }),
+        addNewShoppingList: builder.mutation<ShoppingList, string>({
             query: (payload) => ({
                 url: '/shopping-lists/',
                 method: 'POST',
@@ -39,7 +47,8 @@ export const apiLists = api.injectEndpoints({
 });
 
 export const {
-    useGetShoppingListsQuery,
+    useGetUserShoppingListsQuery,
+    useGetShoppingListQuery,
     useAddNewShoppingListMutation,
     useUpdateShoppingListMutation,
     useDeleteShoppingListMutation,

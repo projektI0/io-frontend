@@ -1,6 +1,6 @@
 import axios from "axios";
-import {API_HEADERS} from "../Auth/types/types";
-import {authHeader} from "../Auth/AuthService";
+import {API_HEADERS} from "../auth/types/types";
+import {authHeader} from "../auth/AuthService";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
@@ -20,7 +20,3 @@ export const search = (name: string) => {
             return error.response;
         });
 };
-
-export const getTags = () => {
-
-}

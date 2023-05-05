@@ -1,67 +1,59 @@
 import {createSlice} from "@reduxjs/toolkit";
-
-interface List {
-    listName: string;
-    listItems: string[];
-}
+import {ShoppingList} from "../components/lists/types";
+import {ShoppingListProduct} from "../components/products/types";
 
 interface ListsState {
-    activeList: string;
-    activeListIndex: number;
-    activeListItems: string[];
-    newListName: string;
-    lists: List[];
+    activeList?: ShoppingList;
+    activeProducts: ShoppingListProduct[];
+    query: string;
+    lists: ShoppingList[];
 }
 
 const initialStateValue: ListsState = {
-    activeList: "Groceries",
-    activeListIndex: 0,
-    activeListItems: [],
-    newListName: "",
-    lists: [
-        {listName: "Groceries", listItems: ["Item 1", "Item 2", "Item 3"]},
-        {listName: "Clothes", listItems: ["Item 4", "Item 5", "Item 6"]},
-        {listName: "Electronics", listItems: ["Item 7", "Item 8", "Item 9"]},
-    ]
+    activeList: undefined,
+    activeProducts: [],
+    query: "",
+    lists: []
 };
 
 export const listsSlice = createSlice({
     name: "lists",
     initialState: initialStateValue,
     reducers: {
+        setActiveList: (state, action) => {
+            state.activeList = action.payload
+            console.log(`Active list is ${state.activeList}`)
+        },
+        setQuery: (state, action) => {
+            state.query = action.payload
+        },
+        setActiveProducts: (state, action) => {
+            state.activeProducts = action.payload
+        },
         addList: (state, action) => {
             state.lists.push(action.payload)
         },
         removeList: (state, action) => {
-            state.lists = state.lists.filter(list => list.listName !== action.payload)
+            state.lists = state.lists.filter(list => list !== action.payload)
         },
-        setActiveListName: (state, action) => {
-            state.activeList = action.payload
+        setLists: (state, action) => {
+            state.lists = action.payload
         },
-        setCurrentListIndex: (state, action) => {
-            state.activeListIndex = action.payload
+        addProduct: (state, action) => {
+            state.activeProducts.push(action.payload)
         },
-        setActiveListItems: (state, action) => {
-            state.activeListItems = action.payload;
+        removeProduct: (state, action) => {
+            state.activeProducts = state.activeProducts.filter(product => product !== action.payload)
         },
-        removeActiveListItem: (state, action) => {
-            const activeList = state.lists.find(list => list.listName === state.activeList);
-            if (activeList) {
-                activeList.listItems = activeList.listItems.filter(item => item !== action.payload)
-            }
-        },
-        setCurrentList: (state, action) => {
-            state.activeList = action.payload
+        removeProductFromBase: (state, action) => {
+            state.activeProducts = state.activeProducts.filter(product => product.product !== action.payload)
         },
         renameList: (state, action) => {
             const {oldName, newName} = action.payload;
-            const listToRename = state.lists.find(list => list.listName === oldName);
+            const listToRename = state.lists.find(list => list.name === oldName);
             if (listToRename) {
-                listToRename.listName = newName;
+                listToRename.name = newName;
             }
-        },
-        updateNewListName: (state, action) => {
-            state.newListName = action.payload;
         }
     }
 });
@@ -69,12 +61,13 @@ export const listsSlice = createSlice({
 export const {
     addList,
     removeList,
-    setCurrentList,
+    setLists,
+    addProduct,
+    removeProduct,
+    removeProductFromBase,
+    setActiveProducts,
+    setQuery,
+    setActiveList,
     renameList,
-    setActiveListName,
-    setCurrentListIndex,
-    setActiveListItems,
-    removeActiveListItem,
-    updateNewListName
 } = listsSlice.actions;
 export default listsSlice.reducer;

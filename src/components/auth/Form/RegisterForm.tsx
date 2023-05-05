@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { validateEmail, validatePassword, validateConfirmPassword } from "../validation/validation";
-import { RegisterFormData } from "../types/types";
+import React, {useEffect, useState} from "react";
+import {validateConfirmPassword, validateEmail, validatePassword} from "../validation/validation";
+import {RegisterFormData} from "../types/types";
 import "./Form.css"
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { getCurrentUser, register } from "../AuthService";
+import {Link, NavigateFunction, useNavigate} from "react-router-dom";
+import {getCurrentUser, register} from "../AuthService";
 
 const RegisterForm = () => {
-  let navigate: NavigateFunction = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
   
   const [formData, setFormData] = useState<RegisterFormData>({ email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});

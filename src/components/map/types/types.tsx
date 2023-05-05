@@ -15,7 +15,6 @@ export interface Shop {
     latitude: number;
     longitude: number;
     address: string;
-    tags: Tag[];
 }
 
 export enum ShowStopsText {

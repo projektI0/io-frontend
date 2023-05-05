@@ -7,7 +7,7 @@ const EmptyListMessage = () => {
             <br/>
             - There is no marked list in "My Lists" tab.
             <br/>
-            - Current list has no items in it.
+            - Active list has no items in it.
         </li>
     );
 };

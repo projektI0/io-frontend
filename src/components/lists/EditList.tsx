@@ -1,30 +1,23 @@
 import React, {useState} from 'react';
 import {MIN_LIST_NAME_LENGTH} from "../../constants/Constants";
 import {Tooltip} from "react-tooltip";
-import {useAppDispatch} from "../../hooks/hooks";
-import {updateNewListName} from "../../store/listsSlice";
-import {useUpdateShoppingListMutation} from "../../api/apiLists";
 
 type EditListProps = {
-    onEditList: () => void,
+    onEditList: (value: string) => void,
     onCloseModal: (value: React.SetStateAction<boolean>) => void,
 }
 
-const EditList = (props : EditListProps) => {
-    const [updateListName, {isLoading}] = useUpdateShoppingListMutation({})
-    const dispatch = useAppDispatch()
+const EditList = (props: EditListProps) => {
     const [editInputValue, setEditInputValue] = useState<string>("")
 
     const handleEditInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setEditInputValue(event.target.value);
-        dispatch(updateNewListName(event.target.value))
     };
 
     return (
         <div>
             <div
-                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-            >
+                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <div className="relative w-auto my-6 mx-auto max-w-3xl">
                     {/*content*/}
                     <div
@@ -53,9 +46,7 @@ const EditList = (props : EditListProps) => {
                             className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                             <button
                                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                type="button"
-                                onClick={() => props.onCloseModal(false)}
-                            >
+                                type="button" onClick={() => props.onCloseModal(false)}>
                                 Close
                             </button>
                             <button
@@ -67,7 +58,7 @@ const EditList = (props : EditListProps) => {
                                 disabled={editInputValue.length < MIN_LIST_NAME_LENGTH}
                                 onClick={() => {
                                     props.onCloseModal(false);
-                                    props.onEditList();
+                                    props.onEditList(editInputValue);
                                 }}
                             >
                                 Save Changes

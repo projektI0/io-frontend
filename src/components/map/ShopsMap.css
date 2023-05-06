@@ -115,7 +115,6 @@
   color: white;
   border: none;
   border-radius: 5px;
-  margin-top: 20px;
   cursor: pointer;
   font-size: 20px;
 }
@@ -125,7 +124,7 @@
 }
 
 .map-buttons button.disabled {
-  background-color: #999999;
+  background-color: #a4a4a4;
   cursor: not-allowed;
 }
 

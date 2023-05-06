@@ -37,7 +37,7 @@ const ShopForm = () => {
         return;
       }
   
-      axios.post(API_URL + "shops", formData, {
+      axios.post(API_URL + "/shops", formData, {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",

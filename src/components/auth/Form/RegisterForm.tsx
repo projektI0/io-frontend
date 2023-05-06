@@ -78,21 +78,21 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="form-container md:col-span-3">
-      <form className="form" onSubmit={handleSubmit}>
+    <div className="auth-form-container md:col-span-4">
+      <form className="auth-form" onSubmit={handleSubmit}>
         <label htmlFor="email">Email:</label>
         <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
-        {errors.email && <span className="error">{errors.email}</span>}
+        {errors.email && <span className="auth-error">{errors.email}</span>}
         <label htmlFor="password">Password:</label>
         <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} required />
-        {errors.password && <span className="error">{errors.password}</span>}
+        {errors.password && <span className="auth-error">{errors.password}</span>}
         <label htmlFor="confirm-password">Confirm Password:</label>
         <input type="password" id="confirm-password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} required />
-        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-        {registerStatus !== "" && registerStatus !== "success" && <span className="error">{registerStatus}</span>}
-        <button className="btn-submit" type="submit">Register</button>
+        {errors.confirmPassword && <span className="auth-error">{errors.confirmPassword}</span>}
+        {registerStatus !== "" && registerStatus !== "success" && <span className="auth-error">{registerStatus}</span>}
+        <button className="auth-btn-submit" type="submit">Register</button>
       </form>
-      <p>Already have an account? <Link className="link" to="/login">Login</Link></p>
+      <p className="auth-message">Already have an account? <Link className="link" to="/login">Login</Link></p>
     </div>
   );
 };

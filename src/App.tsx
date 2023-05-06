@@ -64,7 +64,7 @@ const App = () => {
             <div className="App font-body grid md:grid-cols-5">
                 <Navbar />
                 <Routes>
-                    <Route path="/" element={<Navigate to="/active-list" replace/>}/>
+                    <Route path="/" element={<ProtectedRoute children={<Navigate to="/active-list" replace/>}/>}/>
                     <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
                     <Route path="/products" element={<ProtectedRoute children={<ProductList/>}/>}/>
                     <Route path="/lists" element={<ProtectedRoute children={<ShoppingLists/>}/>}/>

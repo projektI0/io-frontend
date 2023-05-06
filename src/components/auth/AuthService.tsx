@@ -10,7 +10,7 @@ export const register = (email: string, password: string) => {
   };
 
   return axios
-  .post(API_URL + "register", data, { headers: API_HEADERS })
+  .post(API_URL + "/register", data, { headers: API_HEADERS })
   .then((response) => {
     return response;
   })
@@ -26,7 +26,7 @@ export const login = (email: string, password: string) => {
   };
 
   return axios
-    .post(API_URL + "login", data, { headers: API_HEADERS })
+    .post(API_URL + "/login", data, { headers: API_HEADERS })
     .then((response) => {
       if (response.data.jwtToken) {
         localStorage.setItem("user", JSON.stringify(response.data));
@@ -50,7 +50,7 @@ export const getCurrentUser = (): User | null => {
   return null;
 };
 
-// We use it while accessing private resources: ex. axios.get(API_URL + "shops", { headers: {"Authorization": authHeader()} });
+// We use it while accessing private resources: ex. axios.get(API_URL + "/shops", { headers: {"Authorization": authHeader()} });
 export const authHeader = (): string => {
   const userStr = localStorage.getItem("user");
   let user = null;

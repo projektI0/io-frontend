@@ -10,6 +10,7 @@ import {authHeader} from "../auth/AuthService";
 import {useAppSelector} from "../../hooks/hooks";
 import ErrorModal from "./ErrorModal";
 
+const API_URL: string = import.meta.env.VITE_API_URL;
 const examplePathShops: Shop[] = [
     {
         id: 1,
@@ -40,24 +41,6 @@ const examplePathShops: Shop[] = [
         address: 'Drottninggatan 50, 111 21 Stockholm, Sweden',
     }
 ]
-
-const API_URL: string = import.meta.env.VITE_API_URL;
-const styles = {
-    map100: {
-        width: "100%",
-    } as React.CSSProperties,
-    map80: {
-        width: "80%",
-    } as React.CSSProperties,
-    stops0: {
-        width: "0%",
-        display: "none",
-    } as React.CSSProperties,
-    stops20: {
-        width: "20%",
-        display: "block",
-    } as React.CSSProperties,
-}
 
 const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     const activeListId = useAppSelector(state => state.lists.activeList?.id ?? -1);
@@ -190,7 +173,9 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
             <div className="map-stops-container">
                 <MapContainer
                     className="map"
-                    style={!showStops ? styles.map100 : styles.map80}
+                    style={{
+                        width: showStops ? "80%" : "100%"
+                      }}
                     center={userLocation}
                     zoom={18}
                     scrollWheelZoom={true}
@@ -204,7 +189,12 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                         shopsPath={path?.shops}
                     />
                 </MapContainer>
-                <div className="stops" style={!showStops ? styles.stops0 : styles.stops20}>
+                <div className="stops" 
+                      style={{
+                        width: showStops ? "20%" : "0%",
+                        display: showStops ? "block" : "none"
+                      }}
+                >
                     <h1>Stops</h1>
                     <ol className="stop-list">
                         {path?.shops?.map((shop, index) => (

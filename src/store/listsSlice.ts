@@ -22,7 +22,6 @@ export const listsSlice = createSlice({
     reducers: {
         setActiveList: (state, action) => {
             state.activeList = action.payload
-            console.log(`Active list is ${state.activeList}`)
         },
         setQuery: (state, action) => {
             state.query = action.payload

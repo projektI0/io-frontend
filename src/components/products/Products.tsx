@@ -6,7 +6,7 @@ const API_URL: string = import.meta.env.VITE_API_URL;
 
 export const search = (name: string) => {
     return axios
-        .post(API_URL + "products/filter", name, {
+        .post(API_URL + "/products/filter", name, {
             headers: {
                 "Content-Type": API_HEADERS['Content-Type'],
                 "Accept": API_HEADERS['Accept'],

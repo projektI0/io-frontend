@@ -74,18 +74,18 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="form-container md:col-span-3">
-        <form className="form" onSubmit={handleSubmit}>
+    <div className="auth-form-container md:col-span-4">
+        <form className="auth-form" onSubmit={handleSubmit}>
             <label htmlFor="email">Email:</label>
             <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
-            {errors.email && <span className="error">{errors.email}</span>}
+            {errors.email && <span className="auth-error">{errors.email}</span>}
             <label htmlFor="password">Password:</label>
             <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} required />
-            {errors.password && <span className="error">{errors.password}</span>}
-            {loginStatus !== "" && loginStatus !== "success" && <span className="error">{loginStatus}</span>}
-            <button className="btn-submit" type="submit">Log in</button>
+            {errors.password && <span className="auth-error">{errors.password}</span>}
+            {loginStatus !== "" && loginStatus !== "success" && <span className="auth-error">{loginStatus}</span>}
+            <button className="auth-btn-submit" type="submit">Log in</button>
         </form>
-        <p className="message">Not yet a member? <Link className="link" to="/register">Create an account</Link></p>
+        <p className="auth-message">Not yet a member? <Link className="link" to="/register">Create an account</Link></p>
     </div>
   );
 };

@@ -23,7 +23,7 @@ const ShopsMapContent = ({userLocation, shopsPath} : {userLocation:L.LatLng, sho
             upperRightLng: bounds.getNorthEast().lng
         }
 
-        axios.post(API_URL + "shops/filter", data, { headers: {
+        axios.post(API_URL + "/shops/filter", data, { headers: {
             "Content-Type": API_HEADERS['Content-Type'],
             "Accept": API_HEADERS['Accept'],
             "Authorization": authHeader(),

@@ -1,9 +1,171 @@
 import "./ShopsMap.css"
-import { MapContainer , TileLayer} from "react-leaflet";
 import ShopsMapContent from "./ShopsMapContent";
+import {useEffect, useRef, useState} from "react";
+import { MapContainer , TileLayer} from "react-leaflet";
+import { ShowStopsText, ShowPathText, PathRequest, Shop, PathResponse } from './types/types';
 import { LatLng } from "leaflet";
+import axios from "axios";
+import { API_HEADERS } from "../auth/types/types";
+import { authHeader } from "../auth/AuthService";
+import { useAppSelector } from "../../hooks/hooks";
+import ErrorModal from "./ErrorModal";
+
+const examplePathShops: Shop[] = [
+    {
+      id: 1,
+      name: 'Carrefour',
+      latitude: 48.864716,
+      longitude: 2.349014,
+      address: '31 Rue du Faubourg Montmartre, 75009 Paris, France',
+    },
+    {
+      id: 2,
+      name: 'IKEA',
+      latitude: 59.350503,
+      longitude: 18.116183,
+      address: 'Barkarbyvägen 11, 177 38 Järfälla, Sweden',
+    },
+    {
+      id: 3,
+      name: 'Zara',
+      latitude: 40.427738,
+      longitude: -3.694062,
+      address: 'Calle de Serrano, 23, 28001 Madrid, Spain',
+    },
+    {
+      id: 4,
+      name: 'H&M',
+      latitude: 59.332552,
+      longitude: 18.064657,
+      address: 'Drottninggatan 50, 111 21 Stockholm, Sweden',
+    }
+]
+
+const API_URL: string = import.meta.env.VITE_API_URL;
+const styles = {
+    map100: {
+        width: "100%",
+    } as React.CSSProperties,
+    map80: {
+        width: "80%",
+    } as React.CSSProperties,
+    stops0: {
+        width: "0%",
+        display: "none",
+    } as React.CSSProperties,
+    stops20: {
+        width: "20%",
+        display: "block",
+    } as React.CSSProperties,
+}
 
 const ShopsMap = ({userLocation} : {userLocation: LatLng | null}) => {
+    const currentShoppingListId = useAppSelector(state => state.lists.activeListIndex);
+    const [path, setPath] = useState<PathResponse|null>(null);
+    const [search, setSearch] = useState<string>("");
+    const [showStops, setShowStops] = useState<boolean>(false);
+    const [changeTypeBtnActive, setChangeTypeBtnActive] = useState<boolean>(false);
+    const [showStopsBtnActive, setShowStopsBtnActive] = useState<boolean>(false);
+    const [showStopsText, setShowStopsText] = useState<ShowStopsText>(ShowStopsText.Show);
+    const [showPathText, setShowPathText] = useState<ShowPathText>(ShowPathText.Show);
+    const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const btnType = useRef<HTMLButtonElement>(null);
+    const btnStops = useRef<HTMLButtonElement>(null);
+
+    const toggleShowStopsText = () => {
+        (showStopsText === ShowStopsText.Show) ? handleShowStops() : handleHideStops();
+        setShowStopsText((showStopsText === ShowStopsText.Show) ? ShowStopsText.Hide : ShowStopsText.Show);
+    };
+
+    const toggleShowPath = () => {
+        (showPathText === ShowPathText.Show) ? handleShowPath() : handleHidePath();     
+    };
+
+    const toggleButtons = () => {
+        if (btnStops.current && btnType.current) {
+            if (btnStops.current.classList.contains('disabled') && (btnType.current.classList.contains('disabled'))) {
+                setShowStopsBtnActive(true)
+                btnStops.current.classList.remove('disabled');
+                setChangeTypeBtnActive(true);
+                btnType.current.classList.remove('disabled');
+            } else {
+                setShowStopsText(ShowStopsText.Show);
+                setShowStopsBtnActive(false);
+                btnStops.current.classList.add('disabled');
+                setChangeTypeBtnActive(false);
+                btnType.current.classList.add('disabled');
+            };
+        };
+    }
+
+    const handleShowPath = () => {
+        const data: PathRequest = {
+            shoppingListId: currentShoppingListId,
+            longitude: userLocation?.lng as number,
+            latitude: userLocation?.lat as number,
+        }
+        
+        axios.post(API_URL + "/path", data, { headers: {
+            "Content-Type": API_HEADERS['Content-Type'],
+            "Accept": API_HEADERS['Accept'],
+            "Authorization": authHeader(),
+        }})
+        .then((response) => {
+            if (response.status != 200) {
+                setPath(null);
+                setErrorMessage(response.data.message);
+                setShowErrorModal(true);
+                return;
+            }
+
+            const pathResponse: PathResponse = response.data;
+            
+            // JUST FOR NOW
+            pathResponse.shops = examplePathShops;
+
+            if (pathResponse.shops.length === 0) { 
+                setPath(null);
+                setErrorMessage("No path for current shopping list.");
+                setShowErrorModal(true);
+                return;
+             }
+
+            setPath(pathResponse);
+            setShowPathText(ShowPathText.Hide);
+            toggleButtons();
+        }) 
+        .catch((error) => {
+            setPath(null);
+            setErrorMessage(error.response.data.message);
+            setShowErrorModal(true);
+        })
+    }
+
+    const handleHidePath = () => {
+        setPath(null);
+        setShowStops(false);
+        setShowPathText(ShowPathText.Show);
+        toggleButtons();
+    }
+
+    const handleShowStops = () => {
+        setShowStops(true);
+    }
+
+    const handleHideStops = () => {
+        setShowStops(false);
+    }
+
+    const handleChangeType = () => {
+        // TODO: Change type of path
+    };
+
+    const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        setSearch(value);
+    };
+
     if (!userLocation) {
         return (
             <div className="error-message container md:col-span-4 flex flex-col">
@@ -13,24 +175,57 @@ const ShopsMap = ({userLocation} : {userLocation: LatLng | null}) => {
     }
 
     return (
-        <div className="container md:col-span-4 flex flex-col">
-            <MapContainer 
-                className="map"
-                center={userLocation} 
-                zoom={18} 
-                scrollWheelZoom={true}
-            >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <ShopsMapContent 
-                    userLocation={userLocation} 
-                />
-            </MapContainer>
-            <div className="map-info">
-                <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio ipsa atque voluptate consectetur dicta harum vel qui libero sunt soluta? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae, maiores? Sint veniam est maxime illo obcaecati, nemo aut corrupti numquam, placeat quos, suscipit quo esse reprehenderit eaque magnam? Labore vel aspernatur debitis, amet eligendi consequuntur et aperiam pariatur ut exercitationem aliquam molestias, quisquam nostrum autem obcaecati sed iure laudantium quis? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nihil atque vero ratione, quis sequi excepturi sit eligendi beatae esse illo. Nisi veritatis, aliquam voluptatibus nulla assumenda eligendi exercitationem vero libero ducimus sunt, nesciunt rem sit porro! Sequi, earum architecto. Recusandae, cum dolores modi odio alias neque ad dicta laboriosam nostrum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor exercitationem ea nostrum, pariatur fuga, quam provident ipsam odio, accusantium eveniet ab excepturi eum modi nihil temporibus soluta dolorum! Iusto harum ducimus qui, minima doloremque, voluptatibus necessitatibus quibusdam ratione eum distinctio quae unde iure voluptates dolores eveniet ut quo! Adipisci ratione quibusdam, animi voluptas beatae enim, laborum nulla placeat nam vero numquam impedit totam. Sunt culpa voluptate natus a repudiandae aliquid vel nemo veritatis voluptatum numquam dicta, unde qui distinctio, quibusdam magnam nulla minus quidem ex adipisci! Cum dignissimos facere voluptas culpa, neque animi quibusdam commodi nihil. Aliquid labore deleniti quod voluptatem repellat voluptate, magni cum quam reprehenderit. Dicta facilis eligendi vitae porro eos sint, minus nulla fugiat reiciendis temporibus voluptate itaque quia perferendis amet optio deserunt similique? Temporibus quam libero dolorem minus quos quaerat voluptate at dolor provident, doloremque dignissimos tempore, repellendus quis voluptatibus rerum assumenda, dolorum maiores! Vero incidunt amet natus similique, saepe expedita dolorum soluta. Fugit est quaerat ullam, cupiditate nam doloremque vitae rem iure quasi corrupti nobis at tempore voluptatibus a consequuntur dicta neque cumque libero Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa quam velit deserunt pariatur recusandae quibusdam at delectus odio doloremque fugit. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem eum ullam suscipit asperiores neque quis ipsum repudiandae vitae vel sit beatae, iste modi reprehenderit laudantium! Suscipit, vero tempore quas vel dolore cupiditate consequuntur ratione autem ad fuga? Eaque, quidem quia fugit consequuntur quae accusamus sit nulla, nam amet aut reprehenderit.</h1>
+        <div className="container md:col-span-4">
+            <div className="search-bar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="search" name="search" value={search} placeholder="Search for a shop" onChange={handleSearchInputChange}/>
             </div>
+            <div className="map-stops-container">
+                <MapContainer 
+                    className="map"
+                    style={!showStops ? styles.map100 : styles.map80}
+                    center={userLocation} 
+                    zoom={18} 
+                    scrollWheelZoom={true}
+                >
+                    <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    <ShopsMapContent 
+                        userLocation={userLocation} 
+                        shopsPath={path?.shops}
+                    />
+                </MapContainer>
+                <div className="stops" style={!showStops ? styles.stops0 : styles.stops20}>
+                    <h1>Stops</h1>
+                    <ol className="stop-list"> 
+                        {path?.shops?.map((shop, index) => (
+                            <li key={index}>{shop.name}</li>
+                        ))}
+                    </ol>
+                </div>
+            </div>
+            <div className="map-buttons">
+                <button type="button" ref={btnStops} onClick={toggleShowStopsText} className="disabled" disabled={!showStopsBtnActive}>
+                    {showStopsText}
+                </button>
+                <button type="button" ref={btnType} onClick={handleChangeType} className="disabled" disabled={!changeTypeBtnActive}>
+                    Change Type
+                </button>
+                <button type="button" onClick={toggleShowPath}>
+                    {showPathText}
+                </button>
+            </div>
+            {showErrorModal && 
+                <ErrorModal
+                    message={errorMessage}
+                    onClose={() => setShowErrorModal(false)}
+                />
+            }
         </div>
     );
 };

@@ -15,5 +15,25 @@ export interface Shop {
     latitude: number;
     longitude: number;
     address: string;
-    tags: Tag[];
 };
+
+export enum ShowStopsText {
+    Show = "Show Stops",
+    Hide = "Hide Stops",
+}
+
+export enum ShowPathText {
+    Show = "Show Path",
+    Hide = "Hide Path",
+}
+
+export interface PathRequest {
+    shoppingListId: number;
+    longitude: number;
+    latitude: number;
+}
+
+export interface PathResponse {
+    shops: Shop[];
+    remainingTagsIds: number[];
+}

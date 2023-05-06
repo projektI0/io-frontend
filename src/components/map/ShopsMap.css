@@ -1,8 +1,67 @@
-.map {
-  width: 100%;
+.container {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.search-bar {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #f2f2f2;
+}
+
+.search-bar input[type="text"] {
+  margin: auto 0;
+  border: none;
+  outline: none;
+  color: #000000;
+  font-size: 1rem;
+  background-color: transparent;
+}
+
+.search-bar input[type="text"]::placeholder {
+  color: #999;
+}
+
+.map-stops-container {
+  width: 99%;
   min-height: 300px;
-  max-height: 1000px;
   height: 100%;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-self: center;
+}
+
+.stops {
+  background-color: #423bc8;
+  color: white;
+  padding: 10px;
+  overflow: auto;
+  word-wrap: break-word;
+}
+
+.stops h1 {
+  border-bottom: 1px solid white;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.stop-list {
+  list-style-type: decimal;
+  padding: 0 0 0 20px;
+}
+
+.stop-list li {
+  margin-bottom: 5px;
+  font-size: 1.2rem;
 }
 
 .shop-info h2 {
@@ -42,8 +101,32 @@
   color: red;
 }
 
-.map-info {
-  overflow-y: auto;
+.map-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.map-buttons button {
+  padding: 10px;
+  background-color: #423bc8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.map-buttons button:hover {
+  background-color: #3730a3;
+}
+
+.map-buttons button.disabled {
+  background-color: #999999;
+  cursor: not-allowed;
 }
 
 @media only screen and (max-width: 800px) {

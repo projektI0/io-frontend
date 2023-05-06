@@ -8,7 +8,7 @@ import { authHeader } from '../auth/AuthService';
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-const ShopsMapContent = ({userLocation} : {userLocation:L.LatLng}) => {
+const ShopsMapContent = ({userLocation, shopsPath} : {userLocation:L.LatLng, shopsPath:Shop[]|undefined}) => {
     const [shops, setShops] = useState<Shop[]|null>(null);
     
     const map = useMap();
@@ -83,11 +83,6 @@ const ShopsMapContent = ({userLocation} : {userLocation:L.LatLng}) => {
                         <div className="shop-info">
                             <h2>{shop.name}</h2>
                             <p>{shop.address}</p>
-                            <ul>
-                                {shop.tags && shop.tags.map(tag => (
-                                    <li key={tag.id}>{tag.name}</li>
-                                ))}
-                            </ul>
                         </div>
                     </Popup>
                 </Marker>

@@ -1,0 +1,34 @@
+.error-modal-content {
+  width: 25%;
+  height: 25%;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.error-modal-content h1 {
+  height: 10%;
+  font-size: 2rem;
+}
+
+.error-modal-content .error-modal-content-message {
+  height: 80%;
+  font-size: 1.2rem;
+}
+
+.error-modal-content .error-modal-content-button {
+  display: flex;
+  justify-content: flex-end;
+  height: 10%;
+  font-size: 1.2rem;
+}
+
+.error-modal-content .error-modal-content-button button {
+  border-radius: 0.5rem;
+  border: none;
+  color: red;
+  cursor: pointer;
+}

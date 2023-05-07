@@ -1,9 +1,13 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 import EmptyListMessage from "./EmptyListMessage";
-import {useDeleteShoppingListProductMutation, useGetShoppingListWithProductsQuery} from "../../api/apiProducts";
+import {
+    useDeleteShoppingListProductMutation,
+    useGetShoppingListWithProductsQuery,
+    useUpdateShoppingListProductMutation
+} from "../../api/apiProducts";
 import {ShoppingListProduct} from "../products/types";
-import {removeProduct, setActiveProducts} from "../../store/listsSlice";
+import {removeProduct, setActiveProducts, updateProduct} from "../../store/listsSlice";
 
 const ActiveShoppingList = () => {
     const dispatch = useAppDispatch()
@@ -14,6 +18,7 @@ const ActiveShoppingList = () => {
         skip: activeListId < 0
     });
     const [removeShoppingListItem] = useDeleteShoppingListProductMutation()
+    const [updateShoppingListItem] = useUpdateShoppingListProductMutation()
 
     const [listProducts, setListProducts] = useState<ShoppingListProduct[]>([])
 
@@ -34,6 +39,21 @@ const ActiveShoppingList = () => {
         setListProducts(activeProducts)
     }
 
+    const handleQuantityChange = async (event: React.ChangeEvent<HTMLInputElement>, item: ShoppingListProduct) => {
+        const newQuantity = Number(event.target.value);
+        if (newQuantity < 1) {
+            return;
+        }
+        const updatedItem = {...item, quantity: newQuantity,};
+        await updateShoppingListItem({
+            listId: activeListId,
+            productId: item.product.product.id,
+            quantity: newQuantity,
+        });
+        dispatch(updateProduct({previous: item, updated: updatedItem}));
+        setListProducts(activeProducts);
+    };
+
     return (
         <div className="md:col-span-4 flex flex-col items-center">
             <h1 className="p-10 text-3xl text-primary font-bold">
@@ -49,6 +69,13 @@ const ActiveShoppingList = () => {
                                 <div>
                                     {item.product.product.name}
                                 </div>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    className="w-16 text-center"
+                                    value={item.quantity}
+                                    onChange={(e) => handleQuantityChange(e, item)}
+                                />
                                 <button className="bg-primary text-white rounded-md px-4 py-2 m-1"
                                         onClick={() => handleRemoveItem(item)}
                                 >

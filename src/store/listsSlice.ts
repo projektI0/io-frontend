@@ -42,10 +42,9 @@ export const listsSlice = createSlice({
             state.activeProducts.push(action.payload)
         },
         updateProduct: (state, action) => {
-            const previousItem = action.payload.previous
-            const updatedItem = action.payload.updated
-            state.activeProducts = state.activeProducts.filter(product => product !== previousItem)
-            state.activeProducts.push(updatedItem)
+            const {previous, updated} = action.payload;
+            state.activeProducts = state.activeProducts.filter(product => product !== previous)
+            state.activeProducts.push(updated)
         },
         removeProduct: (state, action) => {
             state.activeProducts = state.activeProducts.filter(product => product !== action.payload)
@@ -55,9 +54,10 @@ export const listsSlice = createSlice({
         },
         renameList: (state, action) => {
             const {oldName, newName} = action.payload;
-            const listToRename = state.lists.find(list => list.name === oldName);
+            const listToRename = state.lists.find(otherList => otherList.name === oldName);
             if (listToRename) {
                 listToRename.name = newName;
+                state.activeList = listToRename
             }
         }
     }

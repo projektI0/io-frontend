@@ -35,6 +35,8 @@ const ProductList = () => {
                 }
                 setSearchedProducts(response.data.data)
             })
+        } else {
+            setSearchedProducts([])
         }
     }, [query]);
 

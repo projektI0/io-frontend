@@ -27,13 +27,14 @@ export const apiProducts = api.injectEndpoints({
         }),
         updateShoppingListProduct: builder.mutation({
             query: (args) => {
-                const {listId, productId, payload} = args
+                const {listId, productId, quantity} = args
                 return {
                     url: `/shopping-lists/${listId}/products/${productId}`,
                     method: 'PUT',
-                    body: payload,
+                    body: quantity,
                 }
-            }
+            },
+            invalidatesTags: ['ActiveShoppingList'],
         }),
         deleteShoppingListProduct: builder.mutation({
             query: (args) => {

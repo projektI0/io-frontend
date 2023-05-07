@@ -41,6 +41,12 @@ export const listsSlice = createSlice({
         addProduct: (state, action) => {
             state.activeProducts.push(action.payload)
         },
+        updateProduct: (state, action) => {
+            const previousItem = action.payload.previous
+            const updatedItem = action.payload.updated
+            state.activeProducts = state.activeProducts.filter(product => product !== previousItem)
+            state.activeProducts.push(updatedItem)
+        },
         removeProduct: (state, action) => {
             state.activeProducts = state.activeProducts.filter(product => product !== action.payload)
         },
@@ -62,6 +68,7 @@ export const {
     removeList,
     setLists,
     addProduct,
+    updateProduct,
     removeProduct,
     removeProductFromBase,
     setActiveProducts,

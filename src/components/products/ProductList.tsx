@@ -83,24 +83,45 @@ const ProductList = () => {
         }
 
         return (
-            <div className="container1 md:col-span-3 flex flex-col">
-                <Multiselect options={tags} selectedValues={selectedTags} displayValue="name"
-                             onSelect={onSelect} onRemove={onRemove}/>
-                <input className="w-1/2" placeholder="Enter product name" value={query}
-                       onChange={(e) => dispatch(setQuery(e.target.value))}/>
-                {
-                    searchedProducts.map((product, index) => (
-                        <div key={index}>
-                            {activeListId >= 0 && <input type="checkbox"
-                                                         checked={checkIfProductOnList(product)}
-                                                         onChange={(e) => handleProductCheck(e, product)}/>}
-                            {index} : {product.name} - {product.description}
-                        </div>
-                    ))
-                }
+            <div className="products-container md:col-span-4 p-10">
+                <div className="products-multiselect-container">
+                    <Multiselect  
+                        className="products-multiselect"
+                        options={tags} 
+                        selectedValues={selectedTags} 
+                        displayValue="name"
+                        onSelect={onSelect} 
+                        onRemove={onRemove}
+                    />
+                </div>
+                <div className="products-input-container">
+                    <input 
+                        className="products-input"
+                        placeholder="Enter product name" 
+                        value={query}
+                        onChange={(e) => dispatch(setQuery(e.target.value))}
+                    />
+                </div>
+                <div className="products-items-container">
+                    <ol className="products-ol">
+                        {
+                            searchedProducts.map((product, index) => (
+                                <li key={index}>
+                                    {activeListId >= 0 && 
+                                        <input 
+                                            type="checkbox"
+                                            checked={checkIfProductOnList(product)}
+                                            onChange={(e) => handleProductCheck(e, product)}
+                                        />
+                                    }
+                                    {index + 1} : {product.name} - {product.description}
+                                </li>
+                            ))
+                        }
+                    </ol>
+                </div>
             </div>
         );
-    }
-;
+};
 
-export default ProductList
+export default ProductList;

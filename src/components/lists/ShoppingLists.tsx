@@ -41,8 +41,15 @@ const ShoppingLists = () => {
             return
         }
         setShoppingLists(userShoppingLists)
-        dispatch(setLists(userShoppingLists))
     }, [userShoppingLists, shoppingListsIsSuccess])
+
+    useEffect(() => {
+        dispatch(setLists(shoppingLists))
+        if (activeList) {
+            setActiveListIndex(shoppingLists.map(list => list.id).indexOf(activeList.id))
+        }
+    }, [shoppingLists, dispatch]);
+
 
     const handleAddNewList = async (inputValue: string) => {
         await addNewShoppingList(inputValue).unwrap().then(response => {
@@ -54,7 +61,7 @@ const ShoppingLists = () => {
     const handleEditList = async (editInputValue: string) => {
         const listId = shoppingLists[activeListIndex].id
         await updateShoppingList({id: listId, payload: editInputValue})
-        dispatch(renameList({oldName: shoppingLists[activeListIndex], newName: editInputValue}))
+        dispatch(renameList({oldName: shoppingLists[activeListIndex].name, newName: editInputValue}))
         setShoppingLists(allLists)
     }
 

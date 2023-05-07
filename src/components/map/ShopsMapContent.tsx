@@ -1,14 +1,23 @@
+import React from 'react';
 import axios from 'axios';
-import L from 'leaflet';
 import { useCallback, useEffect, useState } from 'react'
 import { Marker, useMap, Popup  } from 'react-leaflet';
 import { Shop } from './types/types';
 import { API_HEADERS } from '../auth/types/types';
 import { authHeader } from '../auth/AuthService';
+// import L from 'leaflet';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import 'leaflet-routing-machine';
+declare let L: any;
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-const ShopsMapContent = ({userLocation, shopsPath} : {userLocation:L.LatLng, shopsPath:Shop[]|undefined}) => {
+type ShopsMapContentProps = {
+    userLocation: L.LatLng,
+    shopsPath: Shop[] | undefined
+};
+
+const ShopsMapContent = ({userLocation, shopsPath} : ShopsMapContentProps) => {
     const [shops, setShops] = useState<Shop[]|null>(null);
     
     const map = useMap();
@@ -35,6 +44,16 @@ const ShopsMapContent = ({userLocation, shopsPath} : {userLocation:L.LatLng, sho
             }
 
             setShops(response.data);
+
+            // Get a route from shopsPath
+            if (shopsPath) {
+                L.Routing.control({
+                    waypoints: [
+                        L.latLng(userLocation.lat, userLocation.lng),
+                        ...shopsPath.map(shop => L.latLng(shop.latitude, shop.longitude))
+                    ],
+                }).addTo(map);
+            }
         }) 
         .catch((error) => {
             setShops(null);

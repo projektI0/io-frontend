@@ -1,9 +1,12 @@
+import React from "react";
 import "./ShopsMap.css"
 import ShopsMapContent from "./ShopsMapContent";
 import {useRef, useState} from "react";
 import {MapContainer, TileLayer} from "react-leaflet";
 import {PathRequest, PathResponse, Shop, ShowPathText, ShowStopsText} from './types/types';
-import {LatLng} from "leaflet";
+import L,  {LatLng} from "leaflet";
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import 'leaflet-routing-machine';
 import axios from "axios";
 import {API_HEADERS} from "../auth/types/types";
 import {authHeader} from "../auth/AuthService";
@@ -124,6 +127,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                 setPath(null);
                 setErrorMessage(error.response.data.message);
                 setShowErrorModal(true);
+                console.log(error.response.data.message)
             })
     }
 
@@ -160,7 +164,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     }
 
     return (
-        <div className="container md:col-span-4">
+        <div className="flex flex-col items-center py-4 px-8 justify-around gap-4 col-span-4">
             <div className="search-bar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -174,7 +178,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                 <MapContainer
                     className="map"
                     style={{
-                        width: showStops ? "80%" : "100%"
+                        width: showStops ? "80%" : "100%",
                       }}
                     center={userLocation}
                     zoom={18}
@@ -186,7 +190,8 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                     />
                     <ShopsMapContent
                         userLocation={userLocation}
-                        shopsPath={path?.shops}
+                        // shopsPath={path?.shops}
+                        shopsPath={examplePathShops}
                     />
                 </MapContainer>
                 <div className="stops" 

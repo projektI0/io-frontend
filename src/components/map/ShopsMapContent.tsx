@@ -66,15 +66,6 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
             routeControl = L.Routing.control({
                 waypoints: waypoints
             }).addTo(map);
-
-            L.marker(firstWaypoint, {
-                icon: L.icon({
-                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                    iconSize: [48, 48],
-                    iconAnchor: [24, 48],
-                    popupAnchor: [0, -82],
-                })
-            }).addTo(map);
         }
         setRouteControl(routeControl);
     }, [map, showPath]);
@@ -100,6 +91,24 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
 
     return (
         <>
+            {!showPath &&
+                <Marker
+                    icon={
+                        new L.Icon({
+                            iconSize: [32, 32],
+                            iconUrl:
+                                "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png",
+                        })
+                    }
+                    position={userLocation}
+                >
+                    <Popup position={userLocation}>
+                        <div>
+                            <h2>You are here</h2>
+                        </div>
+                    </Popup>
+                </Marker>
+            }
             {shops && shops.map(shop => (
                 <Marker key={shop.id} position={[shop.latitude, shop.longitude]}>
                     <Popup position={[shop.latitude, shop.longitude]} closeButton={true} closeOnClick={false}>

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react'
-import { Marker, useMap, Popup  } from 'react-leaflet';
-import { Shop } from './types/types';
-import { API_HEADERS } from '../auth/types/types';
-import { authHeader } from '../auth/AuthService';
+import {Marker, Popup, useMap} from 'react-leaflet';
+import {Shop} from './types/types';
+import {API_HEADERS} from '../auth/types/types';
+import {authHeader} from '../auth/AuthService';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 
@@ -40,18 +39,15 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
                 "Accept": API_HEADERS['Accept'],
                 "Authorization": authHeader(),
             }
-        })
-            .then((response) => {
-                if (response.status != 200) {
-                    setShops(null);
-                    return;
-                }
-
-                setShops(response.data);
-            })
-            .catch((error) => {
+        }).then((response) => {
+            if (response.status != 200) {
                 setShops(null);
-            })
+                return;
+            }
+            setShops(response.data);
+        }).catch((error) => {
+            setShops(null);
+        })
     }
 
     const onBoundsChange = useCallback(() => {
@@ -60,18 +56,28 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
 
     useEffect(() => {
         updateMap();
-        // Get a route from shopsPath
         let routeControl = null;
         if (shopsPath && showPath) {
+            const firstWaypoint = L.latLng(userLocation.lat, userLocation.lng);
+            const waypoints = [
+                firstWaypoint,
+                ...shopsPath.map(shop => L.latLng(shop.latitude, shop.longitude))];
+
             routeControl = L.Routing.control({
-                waypoints: [
-                    L.latLng(userLocation.lat, userLocation.lng),
-                    ...shopsPath.map(shop => L.latLng(shop.latitude, shop.longitude))
-                ],
+                waypoints: waypoints
+            }).addTo(map);
+
+            L.marker(firstWaypoint, {
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                    iconSize: [48, 48],
+                    iconAnchor: [24, 48],
+                    popupAnchor: [0, -82],
+                })
             }).addTo(map);
         }
         setRouteControl(routeControl);
-    }, [map, showPath])
+    }, [map, showPath]);
 
     useEffect(() => {
         // Remove route control when showPath becomes false
@@ -80,7 +86,6 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
             setRouteControl(null);
         }
     }, [showPath])
-
 
 
     useEffect(() => {

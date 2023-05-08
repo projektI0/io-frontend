@@ -16,32 +16,32 @@ import ErrorModal from "./ErrorModal";
 const API_URL: string = import.meta.env.VITE_API_URL;
 const examplePathShops: Shop[] = [
     {
-        id: 1,
-        name: 'Carrefour',
-        latitude: 48.864716,
-        longitude: 2.349014,
-        address: '31 Rue du Faubourg Montmartre, 75009 Paris, France',
+        "id": 1,
+        "name": "Lewiatan Market",
+        "longitude": 19.9683061,
+        "latitude": 50.0880206,
+        "address": "31-416 Kraków, Dobrego Pasterza 100"
     },
     {
-        id: 2,
-        name: 'IKEA',
-        latitude: 59.350503,
-        longitude: 18.116183,
-        address: 'Barkarbyvägen 11, 177 38 Järfälla, Sweden',
+        "id": 2,
+        "name": "Dom Aukcyjny Rempex",
+        "longitude": 19.9352877,
+        "latitude": 50.0626174,
+        "address": "None Kraków, Jagiellońska 6A"
     },
     {
-        id: 3,
-        name: 'Zara',
-        latitude: 40.427738,
-        longitude: -3.694062,
-        address: 'Calle de Serrano, 23, 28001 Madrid, Spain',
+        "id": 3,
+        "name": "Pasieka",
+        "longitude": 19.9361546,
+        "latitude": 50.0636209,
+        "address": "31-011 Kraków, Plac Szczepański 8"
     },
     {
-        id: 4,
-        name: 'H&M',
-        latitude: 59.332552,
-        longitude: 18.064657,
-        address: 'Drottninggatan 50, 111 21 Stockholm, Sweden',
+        "id": 4,
+        "name": "Wawel",
+        "longitude": 19.9362679,
+        "latitude": 50.0623496,
+        "address": "None Kraków, Rynek Główny 33"
     }
 ]
 

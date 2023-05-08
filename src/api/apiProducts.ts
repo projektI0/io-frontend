@@ -45,6 +45,23 @@ export const apiProducts = api.injectEndpoints({
                 }
             },
             invalidatesTags: ['ProductList', 'ActiveShoppingList'],
+        }),
+        getAllTags: builder.query({
+            query: () => ({
+                url: `/tags`,
+                method: 'GET',
+            }),
+            providesTags: ['ProductList'],
+        }),
+        getProductsWithFilter: builder.mutation({
+            query: (payload) => {
+                return {
+                    url: `/products/filter`,
+                    method: 'POST',
+                    body: payload,
+                }
+            },
+            invalidatesTags: ['ProductList']
         })
     }),
 });
@@ -53,5 +70,7 @@ export const {
     useGetShoppingListWithProductsQuery,
     useAddShoppingListProductMutation,
     useUpdateShoppingListProductMutation,
-    useDeleteShoppingListProductMutation
+    useDeleteShoppingListProductMutation,
+    useGetAllTagsQuery,
+    useGetProductsWithFilterMutation
 } = apiProducts;

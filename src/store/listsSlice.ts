@@ -1,19 +1,22 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {ShoppingList} from "../components/lists/types";
 import {ShoppingListProduct} from "../components/products/types";
+import {Tag} from "../components/map/types/types";
 
 interface ListsState {
     activeList?: ShoppingList;
     activeProducts: ShoppingListProduct[];
     query: string;
     lists: ShoppingList[];
+    tags: Tag[];
 }
 
 const initialStateValue: ListsState = {
     activeList: undefined,
     activeProducts: [],
     query: "",
-    lists: []
+    lists: [],
+    tags: [],
 };
 
 export const listsSlice = createSlice({
@@ -25,6 +28,9 @@ export const listsSlice = createSlice({
         },
         setQuery: (state, action) => {
             state.query = action.payload
+        },
+        setTags: (state, action) => {
+            state.tags = action.payload
         },
         setActiveProducts: (state, action) => {
             state.activeProducts = action.payload
@@ -73,6 +79,7 @@ export const {
     removeProductFromBase,
     setActiveProducts,
     setQuery,
+    setTags,
     setActiveList,
     renameList,
 } = listsSlice.actions;

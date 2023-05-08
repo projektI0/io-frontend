@@ -1,9 +1,12 @@
+import React from "react";
 import "./ShopsMap.css"
 import ShopsMapContent from "./ShopsMapContent";
 import {useRef, useState} from "react";
 import {MapContainer, TileLayer} from "react-leaflet";
 import {PathRequest, PathResponse, Shop, ShowPathText, ShowStopsText} from './types/types';
-import {LatLng} from "leaflet";
+import L,  {LatLng} from "leaflet";
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import 'leaflet-routing-machine';
 import axios from "axios";
 import {API_HEADERS} from "../auth/types/types";
 import {authHeader} from "../auth/AuthService";
@@ -13,32 +16,32 @@ import ErrorModal from "./ErrorModal";
 const API_URL: string = import.meta.env.VITE_API_URL;
 const examplePathShops: Shop[] = [
     {
-        id: 1,
-        name: 'Carrefour',
-        latitude: 48.864716,
-        longitude: 2.349014,
-        address: '31 Rue du Faubourg Montmartre, 75009 Paris, France',
+        "id": 1,
+        "name": "Lewiatan Market",
+        "longitude": 19.9683061,
+        "latitude": 50.0880206,
+        "address": "31-416 Kraków, Dobrego Pasterza 100"
     },
     {
-        id: 2,
-        name: 'IKEA',
-        latitude: 59.350503,
-        longitude: 18.116183,
-        address: 'Barkarbyvägen 11, 177 38 Järfälla, Sweden',
+        "id": 2,
+        "name": "Dom Aukcyjny Rempex",
+        "longitude": 19.9352877,
+        "latitude": 50.0626174,
+        "address": "None Kraków, Jagiellońska 6A"
     },
     {
-        id: 3,
-        name: 'Zara',
-        latitude: 40.427738,
-        longitude: -3.694062,
-        address: 'Calle de Serrano, 23, 28001 Madrid, Spain',
+        "id": 3,
+        "name": "Pasieka",
+        "longitude": 19.9361546,
+        "latitude": 50.0636209,
+        "address": "31-011 Kraków, Plac Szczepański 8"
     },
     {
-        id: 4,
-        name: 'H&M',
-        latitude: 59.332552,
-        longitude: 18.064657,
-        address: 'Drottninggatan 50, 111 21 Stockholm, Sweden',
+        "id": 4,
+        "name": "Wawel",
+        "longitude": 19.9362679,
+        "latitude": 50.0623496,
+        "address": "None Kraków, Rynek Główny 33"
     }
 ]
 
@@ -46,6 +49,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     const activeListId = useAppSelector(state => state.lists.activeList?.id ?? -1);
     const [path, setPath] = useState<PathResponse | null>(null);
     const [search, setSearch] = useState<string>("");
+    const [showPath, setShowPath] = useState<boolean>(false);
     const [showStops, setShowStops] = useState<boolean>(false);
     const [changeTypeBtnActive, setChangeTypeBtnActive] = useState<boolean>(false);
     const [showStopsBtnActive, setShowStopsBtnActive] = useState<boolean>(false);
@@ -62,6 +66,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     };
 
     const toggleShowPath = () => {
+        setShowPath((showPathText === ShowPathText.Show));
         (showPathText === ShowPathText.Show) ? handleShowPath() : handleHidePath();
     };
 
@@ -83,52 +88,60 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     }
 
     const handleShowPath = () => {
-        const data: PathRequest = {
-            shoppingListId: activeListId,
-            longitude: userLocation?.lng as number,
-            latitude: userLocation?.lat as number,
+        // TODO: uncomment when tags on backend are ready (1).
+        // const data: PathRequest = {
+        //     shoppingListId: activeListId,
+        //     longitude: userLocation?.lng as number,
+        //     latitude: userLocation?.lat as number,
+        // }
+        // axios.post(API_URL + "/path", data, {
+        //     headers: {
+        //         "Content-Type": API_HEADERS['Content-Type'],
+        //         "Accept": API_HEADERS['Accept'],
+        //         "Authorization": authHeader(),
+        //     }
+        // })
+        //     .then((response) => {
+        //         if (response.status != 200) {
+        //             setPath(null);
+        //             setErrorMessage(response.data.message);
+        //             setShowErrorModal(true);
+        //             return;
+        //         }
+        //
+        //         const pathResponse: PathResponse = response.data;
+        //
+        //         // JUST FOR NOW
+        //         pathResponse.shops = examplePathShops;
+        //
+        //         if (pathResponse.shops.length === 0) {
+        //             setPath(null);
+        //             setErrorMessage("No path for current shopping list.");
+        //             setShowErrorModal(true);
+        //             return;
+        //         }
+        //
+        //         setPath(pathResponse);
+        //         setShowPathText(ShowPathText.Hide);
+        //         toggleButtons();
+        //     })
+        //     .catch((error) => {
+        //         setPath(null);
+        //         setErrorMessage(error.response.data.message);
+        //         setShowErrorModal(true);
+        //     })
+        const pathResponse: PathResponse = {
+            shops: examplePathShops,
+            remainingTagsIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         }
-
-        axios.post(API_URL + "/path", data, {
-            headers: {
-                "Content-Type": API_HEADERS['Content-Type'],
-                "Accept": API_HEADERS['Accept'],
-                "Authorization": authHeader(),
-            }
-        })
-            .then((response) => {
-                if (response.status != 200) {
-                    setPath(null);
-                    setErrorMessage(response.data.message);
-                    setShowErrorModal(true);
-                    return;
-                }
-
-                const pathResponse: PathResponse = response.data;
-
-                // JUST FOR NOW
-                pathResponse.shops = examplePathShops;
-
-                if (pathResponse.shops.length === 0) {
-                    setPath(null);
-                    setErrorMessage("No path for current shopping list.");
-                    setShowErrorModal(true);
-                    return;
-                }
-
-                setPath(pathResponse);
-                setShowPathText(ShowPathText.Hide);
-                toggleButtons();
-            })
-            .catch((error) => {
-                setPath(null);
-                setErrorMessage(error.response.data.message);
-                setShowErrorModal(true);
-            })
+        setPath(pathResponse);
+        setShowPathText(ShowPathText.Hide);
+        toggleButtons();
     }
 
     const handleHidePath = () => {
         setPath(null);
+        setShowPath(false)
         setShowStops(false);
         setShowPathText(ShowPathText.Show);
         toggleButtons();
@@ -160,7 +173,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     }
 
     return (
-        <div className="container md:col-span-4">
+        <div className="flex flex-col items-center py-4 px-8 justify-around gap-4 col-span-4">
             <div className="search-bar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -174,7 +187,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                 <MapContainer
                     className="map"
                     style={{
-                        width: showStops ? "80%" : "100%"
+                        width: showStops ? "80%" : "100%",
                       }}
                     center={userLocation}
                     zoom={18}
@@ -186,7 +199,10 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                     />
                     <ShopsMapContent
                         userLocation={userLocation}
-                        shopsPath={path?.shops}
+                        // TODO: uncomment when tags on backend are ready (2).
+                        // shopsPath={path?.shops}
+                        shopsPath={examplePathShops}
+                        showPath={showPath}
                     />
                 </MapContainer>
                 <div className="stops" 

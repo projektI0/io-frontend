@@ -19,13 +19,13 @@ const ProductList = () => {
     const activeProducts = useAppSelector(state => state.lists.activeProducts)
     const query = useAppSelector(state => state.lists.query)
     const tags = useAppSelector(state => state.lists.tags)
-    const {data: list, isSuccess: listIsSuccess} = useGetShoppingListWithProductsQuery(activeListId, {
+    const {data: list, isSuccess: listIsSuccess} = useGetShoppingListWithProductsQuery({shoppingListId: activeListId}, {
         skip: activeListId < 0
     });
     const [searchData, searchIsSuccess] = useGetProductsWithFilterMutation()
     const [addNewShoppingListItem] = useAddShoppingListProductMutation()
     const [removeShoppingListItem] = useDeleteShoppingListProductMutation()
-    const {data: dataTags, isSuccess: tagsIsSuccess} = useGetAllTagsQuery({})
+    const {data: dataTags, isSuccess: tagsIsSuccess} = useGetAllTagsQuery()
 
     const [localTags, setLocalTags] = useState<Tag[]>([])
     const [searchedProducts, setSearchedProducts] = useState<Product[]>([]);
@@ -33,8 +33,8 @@ const ProductList = () => {
 
     useEffect(() => {
         if (query !== "" || tags.length !== 0) {
-            searchData({query: query, tags: tags.map(tag => tag.id)}).unwrap().then(response => {
-                setSearchedProducts(response.data)
+            searchData({query: query, tags: tags.map(tag => tag.id)}).unwrap().then(products => {
+                setSearchedProducts(products.data)
             })
         } else {
             setSearchedProducts([])
@@ -68,8 +68,8 @@ const ProductList = () => {
         const isChecked = e.target.checked;
         if (isChecked) {
             await addNewShoppingListItem({
-                id: activeListId,
-                payload: {shoppingListId: activeListId, productId: product.id, quantity: 1}
+                shoppingListId: activeListId,
+                product: {shoppingListId: activeListId, productId: product.id, quantity: 1, crossedOut: false}
             }).unwrap().then((response) => {
                 dispatch(addProduct(response))
                 setListProducts(activeProducts);
@@ -77,7 +77,7 @@ const ProductList = () => {
         } else {
             const removedProduct = listProducts.find((selectedProduct) => selectedProduct.product.product.id === product.id);
             if (removedProduct) {
-                await removeShoppingListItem({listId: activeListId, productId: product.id})
+                await removeShoppingListItem({shoppingListId: activeListId, productId: product.id})
                 dispatch(removeProductFromBase(product))
                 setListProducts(activeProducts)
             }
@@ -114,7 +114,7 @@ const ProductList = () => {
             </div>
             <div className="products-items-container">
                 <ol className="products-ol">
-                    {
+                    {   
                         searchedProducts.map((product, index) => (
                             <li key={index}>
                                 {activeListId >= 0 &&

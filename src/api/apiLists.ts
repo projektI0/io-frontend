@@ -1,44 +1,44 @@
 import {api} from "./api";
 import {ShoppingList} from "../components/lists/types";
+import { AddNewShoppingList, DeleteShoppingList, GetShoppingList, UpdateShoppingList } from "./types";
 
 export const apiLists = api.injectEndpoints({
     endpoints: (builder) => ({
-        getUserShoppingLists: builder.query({
+        getUserShoppingLists: builder.query<ShoppingList[],void>({
             query: () => ({
                 url: '/shopping-lists/my',
                 method: 'GET',
             }),
             providesTags: ['ShoppingLists'],
         }),
-        getShoppingList: builder.query({
-            query: (id) => ({
-                url: `/shopping-lists/${id}`,
+        getShoppingList: builder.query<ShoppingList, GetShoppingList>({
+            query: (args) => ({
+                url: `/shopping-lists/${args.shoppingListId}`,
                 method: 'GET',
             }),
             providesTags: ['ShoppingLists'],
         }),
-        addNewShoppingList: builder.mutation<ShoppingList, string>({
-            query: (payload) => ({
+        addNewShoppingList: builder.mutation<ShoppingList, AddNewShoppingList>({
+            query: (args) => ({
                 url: '/shopping-lists/',
                 method: 'POST',
-                body: payload,
+                body: args.name,
             }),
             invalidatesTags: ['ShoppingLists'],
         }),
-        updateShoppingList: builder.mutation({
+        updateShoppingList: builder.mutation<void, UpdateShoppingList>({
             query: (args) => {
-                const {id, payload} = args
                 return {
-                    url: `/shopping-lists/${id}`,
+                    url: `/shopping-lists/${args.shoppingListId}`,
                     method: 'PUT',
-                    body: payload,
+                    body: args.newName,
                 }
             },
             invalidatesTags: ['ShoppingLists'],
         }),
-        deleteShoppingList: builder.mutation({
-            query: (id) => ({
-                url: `/shopping-lists/${id}`,
+        deleteShoppingList: builder.mutation<void, DeleteShoppingList>({
+            query: (args) => ({
+                url: `/shopping-lists/${args.shoppingListId}`,
                 method: 'DELETE',
             }),
             invalidatesTags: ['ShoppingLists'],

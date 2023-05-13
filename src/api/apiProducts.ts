@@ -1,64 +1,59 @@
 import {api} from "./api";
-import {ShoppingListProduct, ShoppingListProductDTO} from "../components/products/types";
 import {ShoppingListView} from "../components/lists/types";
+import type { AddShoppingListProduct, DeleteShoppingListProduct, FilteredProducts, GetProductsWithFilter, GetShoppingListProducts, UpdateShoppingListProduct } from "./types";
+import { Tag } from "../components/map/types/types";
 
 export const apiProducts = api.injectEndpoints({
     endpoints: (builder) => ({
-        getShoppingListWithProducts: builder.query<ShoppingListView, number>({
-            query: (id) => ({
-                url: `/shopping-lists/${id}/view`,
+        getShoppingListWithProducts: builder.query<ShoppingListView, GetShoppingListProducts>({
+            query: (args) => ({
+                url: `/shopping-lists/${args.shoppingListId}/view`,
                 method: 'GET',
             }),
             providesTags: ['ProductList', 'ActiveShoppingList'],
         }),
-        addShoppingListProduct: builder.mutation<ShoppingListProduct, {
-            id: number,
-            payload: ShoppingListProductDTO
-        }>({
+        addShoppingListProduct: builder.mutation<void, AddShoppingListProduct>({
             query: (args) => {
-                const {id, payload} = args
                 return {
-                    url: `/shopping-lists/${id}/products/`,
+                    url: `/shopping-lists/${args.shoppingListId}/products/`,
                     method: 'POST',
-                    body: payload,
+                    body: args.product,
                 }
             },
             invalidatesTags: ['ProductList']
         }),
-        updateShoppingListProduct: builder.mutation({
+        updateShoppingListProduct: builder.mutation<void, UpdateShoppingListProduct>({
             query: (args) => {
-                const {listId, productId, quantity} = args
                 return {
-                    url: `/shopping-lists/${listId}/products/${productId}`,
+                    url: `/shopping-lists/${args.shoppingListId}/products/${args.productId}`,
                     method: 'PUT',
-                    body: quantity,
+                    body: args.updatedProduct,
                 }
             },
             invalidatesTags: ['ActiveShoppingList'],
         }),
-        deleteShoppingListProduct: builder.mutation({
+        deleteShoppingListProduct: builder.mutation<void, DeleteShoppingListProduct>({
             query: (args) => {
-                const {listId, productId} = args
                 return {
-                    url: `/shopping-lists/${listId}/products/${productId}`,
+                    url: `/shopping-lists/${args.shoppingListId}/products/${args.productId}`,
                     method: 'DELETE',
                 }
             },
             invalidatesTags: ['ProductList', 'ActiveShoppingList'],
         }),
-        getAllTags: builder.query({
+        getAllTags: builder.query<Tag[], void>({
             query: () => ({
                 url: `/tags`,
                 method: 'GET',
             }),
             providesTags: ['ProductList'],
         }),
-        getProductsWithFilter: builder.mutation({
-            query: (payload) => {
+        getProductsWithFilter: builder.mutation<FilteredProducts, GetProductsWithFilter>({
+            query: (args) => {
                 return {
                     url: `/products/filter`,
                     method: 'POST',
-                    body: payload,
+                    body: args,
                 }
             },
             invalidatesTags: ['ProductList']

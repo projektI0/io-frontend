@@ -14,10 +14,12 @@ export type ProductWithTags = {
 export type ShoppingListProduct = {
     product: ProductWithTags
     quantity: number;
+    crossedOut: boolean;
 }
 
 export type ShoppingListProductDTO = {
     shoppingListId: number,
     productId: number,
-    quantity: number
+    quantity: number,
+    crossedOut: boolean,
 }

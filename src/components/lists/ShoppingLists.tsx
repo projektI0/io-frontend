@@ -20,7 +20,7 @@ const ShoppingLists = () => {
     const allLists = useAppSelector(state => state.lists.lists)
     const activeList = useAppSelector(state => state.lists.activeList)
 
-    const {data: userShoppingLists, isSuccess: shoppingListsIsSuccess,} = useGetUserShoppingListsQuery({});
+    const {data: userShoppingLists, isSuccess: shoppingListsIsSuccess,} = useGetUserShoppingListsQuery();
     const [addNewShoppingList] = useAddNewShoppingListMutation()
     const [updateShoppingList] = useUpdateShoppingListMutation()
     const [deleteShoppingList] = useDeleteShoppingListMutation()
@@ -52,7 +52,7 @@ const ShoppingLists = () => {
 
 
     const handleAddNewList = async (inputValue: string) => {
-        await addNewShoppingList(inputValue).unwrap().then(response => {
+        await addNewShoppingList({name: inputValue}).unwrap().then(response => {
             dispatch(addList(response))
             setShoppingLists(allLists)
         })
@@ -60,7 +60,7 @@ const ShoppingLists = () => {
 
     const handleEditList = async (editInputValue: string) => {
         const listId = shoppingLists[activeListIndex].id
-        await updateShoppingList({id: listId, payload: editInputValue})
+        await updateShoppingList({shoppingListId: listId, newName: editInputValue})
         dispatch(renameList({oldName: shoppingLists[activeListIndex].name, newName: editInputValue}))
         setShoppingLists(allLists)
     }
@@ -70,7 +70,7 @@ const ShoppingLists = () => {
             dispatch(setActiveList(undefined))
             setActiveListIndex(-1)
         }
-        await deleteShoppingList(list.id)
+        await deleteShoppingList({shoppingListId: list.id})
         dispatch(removeList(list))
         setShoppingLists(allLists)
     }

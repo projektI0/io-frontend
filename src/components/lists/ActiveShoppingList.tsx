@@ -57,10 +57,10 @@ const ActiveShoppingList = () => {
 
     return (
         <div className="md:col-span-4 flex flex-col items-center">
-            <h1 className="p-10 text-3xl text-primary font-bold">
+            <h1 className="p-10 text-2xl text-primary font-bold">
                 Active list
             </h1>
-            <ul className={"flex flex-col w-2/4 "}>
+            <ul className={"flex flex-col w-5/6 "}>
                 {listProducts.length === 0 ? (
                     <EmptyListMessage/>
                 ) : (

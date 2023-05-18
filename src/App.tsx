@@ -1,3 +1,4 @@
+import React from "react";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import NotFound from "./components/NotFound";
@@ -13,6 +14,7 @@ import ShoppingLists from "./components/lists/ShoppingLists";
 import ProductList from "./components/products/ProductList";
 import ShopForm from "./components/shopForm/ShopForm";
 import ProductForm from "./components/productForm/ProductForm";
+import Footer from "./components/Footer";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng | null>(null);
@@ -27,7 +29,7 @@ const App = () => {
             }
         );
 
-        navigator.geolocation.watchPosition (
+        navigator.geolocation.watchPosition(
             (position) => {
                 setUserLocation(new LatLng(position.coords.latitude, position.coords.longitude));
             },
@@ -35,24 +37,24 @@ const App = () => {
                 setUserLocation(null);
             }
         );
-      };
+    };
 
-    useEffect(() => {        
+    useEffect(() => {
         navigator.permissions
-        .query({ name: "geolocation" })
-        .then((permissionStatus) => {
-            if (permissionStatus.state === 'denied') {
-                setUserLocation(null);
-            }
-
-            permissionStatus.onchange = () => {
-                if (permissionStatus.state === 'granted') {
-                    window.location.reload()
-                } else if (permissionStatus.state === 'denied') {
+            .query({name: "geolocation"})
+            .then((permissionStatus) => {
+                if (permissionStatus.state === 'denied') {
                     setUserLocation(null);
                 }
-            };
-        });
+
+                permissionStatus.onchange = () => {
+                    if (permissionStatus.state === 'granted') {
+                        window.location.reload()
+                    } else if (permissionStatus.state === 'denied') {
+                        setUserLocation(null);
+                    }
+                };
+            });
 
         if (!userLocation) {
             updateUserLocation();
@@ -61,21 +63,24 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <div className="App font-body grid md:grid-cols-5">
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<ProtectedRoute children={<Navigate to="/active-list" replace/>}/>}/>
-                    <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
-                    <Route path="/products" element={<ProtectedRoute children={<ProductList/>}/>}/>
-                    <Route path="/lists" element={<ProtectedRoute children={<ShoppingLists/>}/>}/>
-                    <Route path="/active-list" element={<ProtectedRoute children={<ActiveShoppingList/>}/>}/>
-                    <Route path="/new-shop-form" element={<ProtectedRoute children={<ShopForm/>}/>}/>
-                    <Route path="/new-product-form" element={<ProtectedRoute children={<ProductForm />}/>}/>
-                    <Route path="/profile" element={<ProtectedRoute children={<UserProfile />}/>}/>
-                    <Route path="/login" element={<LoginForm />}/>
-                    <Route path="/register" element={<RegisterForm />}/>
-                    <Route path="*" element={<NotFound />}/>
-                </Routes>
+            <div className="App font-body h-screen flex flex-col justify-between">
+                <div>
+                    <Navbar/>
+                    <Routes>
+                        <Route path="/" element={<ProtectedRoute children={<Navigate to="/active-list" replace/>}/>}/>
+                        <Route path="/map" element={<ProtectedRoute children={<ShopsMap userLocation={userLocation}/>}/>}/>
+                        <Route path="/products" element={<ProtectedRoute children={<ProductList/>}/>}/>
+                        <Route path="/lists" element={<ProtectedRoute children={<ShoppingLists/>}/>}/>
+                        <Route path="/active-list" element={<ProtectedRoute children={<ActiveShoppingList/>}/>}/>
+                        <Route path="/new-shop-form" element={<ProtectedRoute children={<ShopForm/>}/>}/>
+                        <Route path="/new-product-form" element={<ProtectedRoute children={<ProductForm/>}/>}/>
+                        <Route path="/profile" element={<ProtectedRoute children={<UserProfile/>}/>}/>
+                        <Route path="/login" element={<LoginForm/>}/>
+                        <Route path="/register" element={<RegisterForm/>}/>
+                        <Route path="*" element={<NotFound/>}/>
+                    </Routes>
+                </div>
+                <Footer/>
             </div>
         </BrowserRouter>
     );

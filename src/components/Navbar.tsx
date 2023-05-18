@@ -26,14 +26,42 @@ const Navbar = () => {
                                 strokeLinejoin="round"
                                 d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
                         </svg>
-                        <div
-                            className="HAMBURGER-ICON space-y-2 pr-10 cursor-pointer"
-                            onClick={() => setIsNavOpen((prev) => !prev)}
-                        >
-                            <span className="block h-0.5 w-8 bg-gray-300 rounded"></span>
-                            <span className="block h-0.5 w-8 bg-gray-300 rounded"></span>
-                            <span className="block h-0.5 w-8 bg-gray-300 rounded"></span>
-                        </div>
+                        {!isNavOpen ? (
+                            <div
+                                className={"pr-10 cursor-pointer"}
+                                onClick={() => setIsNavOpen((prev) => !prev)}
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-8 h-8">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                            </div>
+                        ) : (
+                            <div
+                                className="pr-10 cursor-pointer"
+                                onClick={() => setIsNavOpen((prev) => !prev)}
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-8 h-8">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </div>
+                        )}
                     </div>
 
                     <div className={isNavOpen ? "showMenuNav" : "hidden"}>
@@ -160,15 +188,15 @@ const Navbar = () => {
                             </svg>
                             {(user && user.roles.includes("USER"))
                                 ? (
-                                    <div className="p-4 text-lg">
-                                        <p className="font-bold">{user.loginUserDTO.email}</p>
+                                    <div className="p-4">
+                                        <p className="font-bold text-lg">{user.loginUserDTO.email}</p>
                                         <Link
                                             to="/profile"
-                                            className="p-0 text-sm hover:text-secondary cursor-pointer"
+                                            className="bg-gray-200 py-0.5 px-1 text-sm font-bold text-primary hover:text-secondary cursor-pointer border-2 rounded-md"
                                         >
                                             View profile
                                         </Link>
-                                        <button className="mx-5 p-0 text-sm hover:text-secondary cursor-pointer"
+                                        <button className="mx-2 py-0.5 px-1 bg-gray-200 text-sm font-bold text-primary border-2 rounded-md"
                                                 onClick={() => {
                                                     logout();
                                                     navigate("/");

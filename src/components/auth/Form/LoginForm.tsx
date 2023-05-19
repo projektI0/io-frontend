@@ -74,18 +74,44 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="auth-form-container md:col-span-4">
-        <form className="auth-form" onSubmit={handleSubmit}>
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
+    <div className="w-5/6 md:w-1/2 lg:w-1/3 mx-auto flex flex-col items-center mt-6">
+        <form
+            className="flex flex-col w-full"
+            onSubmit={handleSubmit}>
+            <label htmlFor="email" className={"mb-1 text-md font-bold"}>
+                Email:
+            </label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={"w-full"}
+                required />
             {errors.email && <span className="auth-error">{errors.email}</span>}
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} required />
+            <label htmlFor="password" className={"mb-1"}>
+                Password:
+            </label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required />
             {errors.password && <span className="auth-error">{errors.password}</span>}
             {loginStatus !== "" && loginStatus !== "success" && <span className="auth-error">{loginStatus}</span>}
-            <button className="auth-btn-submit" type="submit">Log in</button>
+            <button
+                className="auth-btn-submit w-3/4 md:w-1/2 lg:w-1/3 mx-auto"
+                type="submit">Log in</button>
         </form>
-        <p className="auth-message">Not yet a member? <Link className="link" to="/register">Create an account</Link></p>
+        <p className="auth-message">
+            Not yet a member?
+            <Link className="link ml-2" to="/register">
+                Create an account
+            </Link>
+        </p>
     </div>
   );
 };

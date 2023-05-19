@@ -173,17 +173,18 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     }
 
     return (
-        <div className="flex flex-col items-center py-4 px-8 justify-around gap-4 col-span-4">
-            <div className="search-bar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="search" name="search" value={search} placeholder="Search for a shop"
-                       onChange={handleSearchInputChange}/>
+        <div className="flex flex-col items-center py-4 px-8 justify-around font-body">
+            <div className="mb-4 w-5/6 flex justify-center items-center">
+                <input
+                    type="text"
+                    id="search"
+                    name="search"
+                    value={search}
+                    placeholder="Search for a shop"
+                    className={"border-secondary border-2"}
+                    onChange={handleSearchInputChange}/>
             </div>
-            <div className="map-stops-container">
+            <div className="map-stops-container lg:min-h-[50%] mb-6">
                 <MapContainer
                     className="map"
                     style={{
@@ -220,16 +221,29 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                 </div>
             </div>
             <div className="map-buttons">
-                <button type="button" ref={btnStops} onClick={toggleShowStopsText} className="disabled"
-                        disabled={!showStopsBtnActive}>
+                <button
+                    type="button"
+                    ref={btnStops}
+                    onClick={toggleShowStopsText}
+                    className="disabled text-sm md:text-base"
+                    disabled={!showStopsBtnActive}
+                >
                     {showStopsText}
                 </button>
-                <button type="button" ref={btnType} onClick={handleChangeType} className="disabled"
-                        disabled={!changeTypeBtnActive}>
+                <button
+                    type="button" ref={btnType}
+                    onClick={handleChangeType}
+                    className="disabled text-sm md:text-base"
+                    disabled={!changeTypeBtnActive}
+                >
                     Change Type
                 </button>
-                <button className={`${activeListId < 0 ? "disabled" : ""}`} type="button" disabled={activeListId < 0}
-                        onClick={toggleShowPath}>
+                <button
+                    className={`${activeListId < 0 ? "disabled" : ""} text-sm md:text-base`}
+                    type="button"
+                    disabled={activeListId < 0}
+                    onClick={toggleShowPath}
+                >
                     {showPathText}
                 </button>
             </div>

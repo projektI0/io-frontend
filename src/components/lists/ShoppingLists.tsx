@@ -76,11 +76,11 @@ const ShoppingLists = () => {
     }
 
     return (
-        <div className="md:col-span-4 flex flex-col items-center">
-            <h1 className="p-10 text-3xl text-primary font-bold">My Shopping Lists</h1>
+        <div className="w-5/6 mx-auto md:col-span-4 flex flex-col items-center">
+            <h1 className="p-10 text-2xl lg:text-3xl text-primary font-bold">My Shopping Lists</h1>
             <div className={"w-full flex justify-end"}>
                 <button
-                    className="flex justify-center items-center mr-20 mb-6 p-2 font-bold text-lg tracking-wide bg-primary rounded-md text-white"
+                    className="flex justify-center items-center mr-4 md:mr-20 mb-6 p-2 font-bold text-sm md:text-base tracking-wide bg-primary rounded-md text-white"
                     type="button"
                     onClick={() => setShowAddModal(true)}>
                     <span className={"px-2"}>New list</span>
@@ -100,7 +100,7 @@ const ShoppingLists = () => {
                 onAddList={handleAddNewList}
                 onCloseModal={() => setShowAddModal(false)}
             />}
-            <ul className={"w-2/4"}>
+            <ul className={"w-full lg:w-3/5"}>
                 {shoppingLists.map((list, index) => {
                     return (<li key={list.id}
                                 className={"flex justify-between items-center text-lg px-4 py-1 m-2 bg-violet-100 rounded-md"}>

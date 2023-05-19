@@ -93,10 +93,10 @@ const ProductList = () => {
     }
 
     return (
-        <div className="products-container md:col-span-4 p-10">
-            <div className="products-multiselect-container">
+        <div className="mt-4 w-5/6 sm:w-1/2 md:w-1/2 lg:w-1/3 mx-auto flex flex-col justify-between items-center font-body">
+            <div className="w-5/6 p-0 mb-2">
                 <Multiselect
-                    className="products-multiselect"
+                    className="m-0 border-secondary border-2 rounded-md"
                     options={localTags}
                     selectedValues={tags}
                     displayValue="name"
@@ -104,15 +104,15 @@ const ProductList = () => {
                     onRemove={onRemove}
                 />
             </div>
-            <div className="products-input-container">
+            <div className="w-5/6 mb-6">
                 <input
-                    className="products-input"
+                    className="w-full border-secondary border-2 rounded-md"
                     placeholder="Enter product name"
                     value={query}
                     onChange={(e) => dispatch(setQuery(e.target.value))}
                 />
             </div>
-            <div className="products-items-container">
+            <div className="w-full flex justify-center">
                 <ol className="products-ol">
                     {
                         searchedProducts.map((product, index) => (

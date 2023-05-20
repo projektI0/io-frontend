@@ -13,7 +13,7 @@ const Navbar = () => {
     return (
         <nav className="bg-primary text-bright">
             <div className="w-full lg:w-3/4 mx-auto flex flex-col justify-between">
-                <div className="text-2xl">
+                <div className="z-10 text-2xl">
                     <div className="pl-6 py-4 pb-4 flex items-center justify-between">
                         <div className={"flex items-center"}>
                             <svg

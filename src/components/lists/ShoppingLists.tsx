@@ -76,7 +76,7 @@ const ShoppingLists = () => {
     }
 
     return (
-        <div className="w-5/6 mx-auto md:col-span-4 flex flex-col items-center">
+        <div className="w-5/6 md:w-4/6 lg:w-3/4 mx-auto flex flex-col items-center">
             <h1 className="p-10 text-2xl lg:text-3xl text-primary font-bold">My Shopping Lists</h1>
             <div className={"w-full flex justify-end"}>
                 <button

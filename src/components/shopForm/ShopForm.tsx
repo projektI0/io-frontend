@@ -222,6 +222,7 @@ const ShopForm = () => {
                                 displayValue="name"
                                 onSelect={onSelect}
                                 onRemove={onRemove}
+                                placeholder="Select tags for shop"
                             />
                         </div>
 

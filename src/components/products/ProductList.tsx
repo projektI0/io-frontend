@@ -102,6 +102,7 @@ const ProductList = () => {
                     displayValue="name"
                     onSelect={onSelect}
                     onRemove={onRemove}
+                    placeholder="Select tags"
                 />
             </div>
             <div className="w-5/6 mb-6">

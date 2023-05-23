@@ -187,6 +187,8 @@ const ProductForm = () => {
                           displayValue="name"
                           onSelect={onSelect}
                           onRemove={onRemove}
+                          placeholder="Select tags for product"
+
                       />
                   </div>
 

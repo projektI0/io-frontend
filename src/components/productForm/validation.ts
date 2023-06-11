@@ -1,4 +1,4 @@
-import {ProductFormData} from "../types/types";
+import {ProductFormData} from "./types";
 
 
 export const validateFormData = (data: ProductFormData) => {

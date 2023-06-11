@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {ProductFormData, ServerResponse} from "./types/types";
-import {validateFormData} from "./validation/validation";
+import {ProductFormData, ServerResponse} from "./types";
+import {validateFormData} from "./validation";
 import axios from "axios";
 import {authHeader} from "../auth/AuthService";
 import {NavigateFunction, useNavigate} from "react-router";

@@ -6,6 +6,14 @@ export type Product = {
     description: string;
 };
 
+export type Recipe = {
+    id: number
+    name: string
+    description: string
+    ingredients: Product[]
+    tags: Tag[]
+}
+
 export type ProductWithTags = {
     product: Product;
     tags: Tag[];

@@ -1,4 +1,4 @@
-import { Product, ShoppingListProductDTO } from "../components/products/types"
+import {Product, ShoppingListProductDTO} from "../components/products/types"
 
 export type GetShoppingListProducts = {
     shoppingListId: number

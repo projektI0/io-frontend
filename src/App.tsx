@@ -15,6 +15,7 @@ import ShopForm from "./components/shopForm/ShopForm";
 import ProductForm from "./components/productForm/ProductForm";
 import Footer from "./components/Footer";
 import Tutorial from "./components/Tutorial";
+import RecipeForm from "./components/recipeForm/RecipeForm";
 
 const App = () => {
     const [userLocation, setUserLocation] = useState<LatLng | null>(null);
@@ -74,6 +75,7 @@ const App = () => {
                         <Route path="/active-list" element={<ProtectedRoute children={<ActiveShoppingList/>}/>}/>
                         <Route path="/new-shop-form" element={<ProtectedRoute children={<ShopForm/>}/>}/>
                         <Route path="/new-product-form" element={<ProtectedRoute children={<ProductForm/>}/>}/>
+                        <Route path="/new-recipe-form" element={<ProtectedRoute children={<RecipeForm/>}/>}/>
                         <Route path="/profile" element={<ProtectedRoute children={<UserProfile/>}/>}/>
                         <Route path="/intro" element={<ProtectedRoute children={<Tutorial/>}/>}/>
                         <Route path="/login" element={<LoginForm/>}/>

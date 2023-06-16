@@ -166,7 +166,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                     onClick={() => setShowStops(!showStops)}
                     className={`${!showPath ? "disabled": ""} text-sm md:text-base px-4 py-2 bg-primary text-gray-50 rounded-md mr-2 cursor-pointer hover:opacity-75`}
                 >
-                    {showStopsText}
+                    {!showStops ? "Show Stops" : "Hide Stops"}
                 </button>
                 <select
                     className={`${activeListId < 0 ? "disabled bg-gray-400" : ""} px-4 py-2 text-sm md:text-base bg-primary text-gray-50 rounded-md mr-2 cursor-pointer`}

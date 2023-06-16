@@ -88,55 +88,43 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     }
 
     const handleShowPath = () => {
-        // TODO: uncomment when tags on backend are ready (1).
-        // const data: PathRequest = {
-        //     shoppingListId: activeListId,
-        //     longitude: userLocation?.lng as number,
-        //     latitude: userLocation?.lat as number,
-        // }
-        // axios.post(API_URL + "/path", data, {
-        //     headers: {
-        //         "Content-Type": API_HEADERS['Content-Type'],
-        //         "Accept": API_HEADERS['Accept'],
-        //         "Authorization": authHeader(),
-        //     }
-        // })
-        //     .then((response) => {
-        //         if (response.status != 200) {
-        //             setPath(null);
-        //             setErrorMessage(response.data.message);
-        //             setShowErrorModal(true);
-        //             return;
-        //         }
-        //
-        //         const pathResponse: PathResponse = response.data;
-        //
-        //         // JUST FOR NOW
-        //         pathResponse.shops = examplePathShops;
-        //
-        //         if (pathResponse.shops.length === 0) {
-        //             setPath(null);
-        //             setErrorMessage("No path for current shopping list.");
-        //             setShowErrorModal(true);
-        //             return;
-        //         }
-        //
-        //         setPath(pathResponse);
-        //         setShowPathText(ShowPathText.Hide);
-        //         toggleButtons();
-        //     })
-        //     .catch((error) => {
-        //         setPath(null);
-        //         setErrorMessage(error.response.data.message);
-        //         setShowErrorModal(true);
-        //     })
-        const pathResponse: PathResponse = {
-            shops: examplePathShops,
-            remainingTagsIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        const data: PathRequest = {
+            shoppingListId: activeListId,
+            longitude: userLocation?.lng as number,
+            latitude: userLocation?.lat as number,
         }
-        setPath(pathResponse);
-        setShowPathText(ShowPathText.Hide);
-        toggleButtons();
+        axios.post(API_URL + "/path", data, {
+            headers: {
+                "Content-Type": API_HEADERS['Content-Type'],
+                "Accept": API_HEADERS['Accept'],
+                "Authorization": authHeader(),
+            }
+        })
+            .then((response) => {
+                if (response.status != 200) {
+                    setPath(null);
+                    setErrorMessage(response.data.message);
+                    setShowErrorModal(true);
+                    return;
+                }
+
+                const pathResponse: PathResponse = response.data;
+
+                if (pathResponse.shops.length === 0) {
+                    setPath(null);
+                    setErrorMessage("No path for current shopping list.");
+                    setShowErrorModal(true);
+                    return;
+                }
+                setPath(pathResponse);
+                setShowPathText(ShowPathText.Hide);
+                toggleButtons();
+            })
+            .catch((error) => {
+                setPath(null);
+                setErrorMessage(error.response.data.message);
+                setShowErrorModal(true);
+            })
     }
 
     const handleHidePath = () => {
@@ -200,9 +188,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                     />
                     <ShopsMapContent
                         userLocation={userLocation}
-                        // TODO: uncomment when tags on backend are ready (2).
-                        // shopsPath={path?.shops}
-                        shopsPath={examplePathShops}
+                        shopsPath={path?.shops}
                         showPath={showPath}
                     />
                 </MapContainer>

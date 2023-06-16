@@ -13,19 +13,34 @@ const UserProfile = () => {
         window.location.reload();
     };
 
+    const handleIntro = () => {
+        navigate('/intro');
+    }
+
     return (
         <div className="md:col-span-4 flex flex-col justify-center items-center font-body text-primary">
             <h1 className="p-10 text-2xl text-primary font-bold">User Profile</h1>
             <div className="flex items-center p border-t">
                 {user && user.roles.includes("USER") ? (
-                    <div className="flex p-4">
-                        <p className="font-bold text-lg mb-1">{user.loginUserDTO.email}</p>
-                        <button
-                            className="mx-4 py-0.5 px-1 bg-gray-200 text-sm font-bold text-primary hover:text-secondary border-2 rounded-md"
-                            onClick={() => {
-                                handleLogout()
-                            }}>Log out
-                        </button>
+                    <div className="flex flex-col items-center p border-t">
+                        <div className="w-full flex p-4 justify-between">
+                            <p className="font-bold text-lg mb-1">{user.loginUserDTO.email}</p>
+                            <button
+                                className="mx-4 py-0.5 px-1 bg-gray-200 text-sm font-bold text-primary hover:text-secondary border-2 rounded-md"
+                                onClick={() => {
+                                    handleLogout()
+                                }}>Log out
+                            </button>
+                        </div>
+                        <div className="w-full flex p-4 justify-between">
+                            <p className="font-bold text-lg mb-1">Application tutorial</p>
+                            <button
+                                className="w-fit mx-4 py-0.5 px-1 bg-gray-200 text-sm font-bold text-primary hover:text-secondary border-2 rounded-md"
+                                onClick={() => {
+                                    handleIntro()
+                                }}>Enable
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <div className="p-4 text-lg">

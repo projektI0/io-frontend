@@ -1,3 +1,4 @@
+![logo](./src/assets/logo.gif)
 ## About The Project
 
 Frontend repository from IO 2023 class at AGH UST.

@@ -3,8 +3,8 @@ import "./ShopsMap.css"
 import ShopsMapContent from "./ShopsMapContent";
 import {useRef, useState} from "react";
 import {MapContainer, TileLayer} from "react-leaflet";
-import {PathRequest, PathResponse, Shop, ShowPathText, ShowStopsText} from './types/types';
-import L,  {LatLng} from "leaflet";
+import {PathRequest, PathResponse, ShowPathText, ShowStopsText} from './types/types';
+import {LatLng} from "leaflet";
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 import axios from "axios";
@@ -14,56 +14,20 @@ import {useAppSelector} from "../../hooks/hooks";
 import ErrorModal from "./ErrorModal";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
-const examplePathShops: Shop[] = [
-    {
-        "id": 1,
-        "name": "Lewiatan Market",
-        "longitude": 19.9683061,
-        "latitude": 50.0880206,
-        "address": "31-416 Kraków, Dobrego Pasterza 100"
-    },
-    {
-        "id": 2,
-        "name": "Dom Aukcyjny Rempex",
-        "longitude": 19.9352877,
-        "latitude": 50.0626174,
-        "address": "None Kraków, Jagiellońska 6A"
-    },
-    {
-        "id": 3,
-        "name": "Pasieka",
-        "longitude": 19.9361546,
-        "latitude": 50.0636209,
-        "address": "31-011 Kraków, Plac Szczepański 8"
-    },
-    {
-        "id": 4,
-        "name": "Wawel",
-        "longitude": 19.9362679,
-        "latitude": 50.0623496,
-        "address": "None Kraków, Rynek Główny 33"
-    }
-]
 
 const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     const activeListId = useAppSelector(state => state.lists.activeList?.id ?? -1);
     const [path, setPath] = useState<PathResponse | null>(null);
     const [search, setSearch] = useState<string>("");
     const [showPath, setShowPath] = useState<boolean>(false);
+    const [selectedRouteType, setSelectedRouteType] = useState<string>("shortestPath");
     const [showStops, setShowStops] = useState<boolean>(false);
-    const [changeTypeBtnActive, setChangeTypeBtnActive] = useState<boolean>(false);
-    const [showStopsBtnActive, setShowStopsBtnActive] = useState<boolean>(false);
     const [showStopsText, setShowStopsText] = useState<ShowStopsText>(ShowStopsText.Show);
     const [showPathText, setShowPathText] = useState<ShowPathText>(ShowPathText.Show);
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const btnType = useRef<HTMLButtonElement>(null);
     const btnStops = useRef<HTMLButtonElement>(null);
-
-    const toggleShowStopsText = () => {
-        (showStopsText === ShowStopsText.Show) ? handleShowStops() : handleHideStops();
-        setShowStopsText((showStopsText === ShowStopsText.Show) ? ShowStopsText.Hide : ShowStopsText.Show);
-    };
 
     const toggleShowPath = () => {
         setShowPath((showPathText === ShowPathText.Show));
@@ -73,18 +37,19 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     const toggleButtons = () => {
         if (btnStops.current && btnType.current) {
             if (btnStops.current.classList.contains('disabled') && (btnType.current.classList.contains('disabled'))) {
-                setShowStopsBtnActive(true)
                 btnStops.current.classList.remove('disabled');
-                setChangeTypeBtnActive(true);
                 btnType.current.classList.remove('disabled');
             } else {
                 setShowStopsText(ShowStopsText.Show);
-                setShowStopsBtnActive(false);
                 btnStops.current.classList.add('disabled');
-                setChangeTypeBtnActive(false);
                 btnType.current.classList.add('disabled');
             }
         }
+    }
+
+    const handleSelectedRouteType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        handleHidePath()
+        setSelectedRouteType(event.target.value);
     }
 
     const handleShowPath = () => {
@@ -92,6 +57,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
             shoppingListId: activeListId,
             longitude: userLocation?.lng as number,
             latitude: userLocation?.lat as number,
+            fewestShops: selectedRouteType === "fewestShops",
         }
         axios.post(API_URL + "/path", data, {
             headers: {
@@ -135,18 +101,6 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
         toggleButtons();
     }
 
-    const handleShowStops = () => {
-        setShowStops(true);
-    }
-
-    const handleHideStops = () => {
-        setShowStops(false);
-    }
-
-    const handleChangeType = () => {
-        // TODO: Change type of path
-    };
-
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {value} = event.target;
         setSearch(value);
@@ -154,7 +108,7 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
 
     if (!userLocation) {
         return (
-            <div className="error-message container md:col-span-4 flex flex-col">
+            <div className="error-message container flex flex-col">
                 <h1>The site requires access to your location.</h1>
             </div>
         );
@@ -192,14 +146,14 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                         showPath={showPath}
                     />
                 </MapContainer>
-                <div className="stops" 
+                <div className="stops rounded-md"
                       style={{
                         width: showStops ? "20%" : "0%",
                         display: showStops ? "block" : "none"
                       }}
                 >
-                    <h1>Stops</h1>
-                    <ol className="stop-list">
+                    <p className="text-md md:text-xl border-b-2 pb-2 font-semibold">Stops</p>
+                    <ol className="m-2 p-2 list-decimal text-sm md:text-base">
                         {path?.shops?.map((shop, index) => (
                             <li key={index}>{shop.name}</li>
                         ))}
@@ -209,23 +163,26 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
             <div className="map-buttons">
                 <button
                     type="button"
-                    ref={btnStops}
-                    onClick={toggleShowStopsText}
-                    className="disabled text-sm md:text-base"
-                    disabled={!showStopsBtnActive}
+                    onClick={() => setShowStops(!showStops)}
+                    className={`${!showPath ? "disabled": ""} text-sm md:text-base px-4 py-2 bg-primary text-gray-50 rounded-md mr-2 cursor-pointer hover:opacity-75`}
                 >
                     {showStopsText}
                 </button>
-                <button
-                    type="button" ref={btnType}
-                    onClick={handleChangeType}
-                    className="disabled text-sm md:text-base"
-                    disabled={!changeTypeBtnActive}
+                <select
+                    className={`${activeListId < 0 ? "disabled bg-gray-400" : ""} px-4 py-2 text-sm md:text-base bg-primary text-gray-50 rounded-md mr-2 cursor-pointer`}
+                    value={selectedRouteType}
+                    onChange={handleSelectedRouteType}
                 >
-                    Change Type
-                </button>
+                    <option
+                        value="shortestPath"
+                        selected
+                    >
+                        Shortest Path
+                    </option>
+                    <option value="fewestShops">Fewest Shops</option>
+                </select>
                 <button
-                    className={`${activeListId < 0 ? "disabled" : ""} text-sm md:text-base`}
+                    className={`${activeListId < 0 ? "disabled" : ""} text-sm md:text-base px-4 py-2 bg-primary text-gray-50 rounded-md cursor-pointer hover:opacity-75`}
                     type="button"
                     disabled={activeListId < 0}
                     onClick={toggleShowPath}

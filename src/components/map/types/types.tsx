@@ -31,6 +31,7 @@ export interface PathRequest {
     shoppingListId: number;
     longitude: number;
     latitude: number;
+    fewestShops?: boolean;
 }
 
 export interface PathResponse {

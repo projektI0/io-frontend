@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
 import {Marker, Popup, useMap} from 'react-leaflet';
 import {Shop} from './types/types';
@@ -6,6 +6,7 @@ import {API_HEADERS} from '../auth/types/types';
 import {authHeader} from '../auth/AuthService';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
+import "./ShopsMapContent.css"
 
 declare let L: any;
 
@@ -20,9 +21,10 @@ type ShopsMapContentProps = {
 const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentProps) => {
     const [shops, setShops] = useState<Shop[] | null>(null);
     const [routeControl, setRouteControl] = useState(null);
+    const [blacklistButtonDisabled, setBlacklistButtonDisabled] = useState(false);
 
-    const map = useMap();
-
+    const map = useMap();      
+    
     const updateMap = () => {
         const bounds = map.getBounds();
 
@@ -48,6 +50,49 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
         }).catch((error) => {
             setShops(null);
         })
+    }
+
+    const handleAddShopToBlacklist = async (shopId: number) => {
+        setBlacklistButtonDisabled(true);
+        await axios.post(API_URL + `/shops/blacklist/${shopId}`, null , {
+            headers: {
+                "Content-Type": API_HEADERS['Content-Type'],
+                "Accept": API_HEADERS['Accept'],
+                "Authorization": authHeader(),
+            }
+        }).then((response) => {
+            if (response.status != 200) {
+                console.error(response)
+                return
+            }
+            if (shops) {
+                setShops(shops?.map(shop => shop.id === shopId ? {...shop, blacklist: true} : shop))
+            }
+        }).catch((error) => {
+            console.error(error)
+        })
+        setBlacklistButtonDisabled(false);
+    }
+
+    const handleDeleteShopFromBlacklist = async (shopId: number) => {
+        setBlacklistButtonDisabled(true);
+        await axios.delete(API_URL + `/shops/blacklist/${shopId}`, {
+            headers: {
+                "Accept": API_HEADERS['Accept'],
+                "Authorization": authHeader(),
+            }
+        }).then((response) => {
+            if (response.status != 200) {
+                console.error(response)
+                return
+            }
+            if (shops) {
+                setShops(shops?.map(shop => shop.id === shopId ? {...shop, blacklist: false} : shop))
+            }
+        }).catch((error) => {
+            console.error(error)
+        })
+        setBlacklistButtonDisabled(false);
     }
 
     const onBoundsChange = useCallback(() => {
@@ -110,11 +155,45 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
                 </Marker>
             }
             {shops && shops.map(shop => (
-                <Marker key={shop.id} position={[shop.latitude, shop.longitude]}>
+                <Marker 
+                    key={shop.id} 
+                    position={[shop.latitude, shop.longitude]}
+                    icon={shop.blacklist ? 
+                        new L.Icon({
+                            iconSize: [32, 32],
+                            iconUrl:
+                            "src/components/map/icons/blackIcon.png",
+                        }) :
+                        new L.Icon({
+                            iconSize: [32, 32],
+                            iconUrl:
+                            "src/components/map/icons/redIcon.png",
+                        })
+                    }
+                >
                     <Popup position={[shop.latitude, shop.longitude]} closeButton={true} closeOnClick={false}>
                         <div className="shop-info">
                             <h2>{shop.name}</h2>
                             <p>{shop.address}</p>
+                            <div>
+                                {shop.blacklist ? (
+                                    <button 
+                                        disabled={blacklistButtonDisabled} 
+                                        className={`${blacklistButtonDisabled ? 'disabled' : ''}`}
+                                        onClick={() => handleDeleteShopFromBlacklist(shop.id)}
+                                    >
+                                        Remove from blacklist
+                                    </button>
+                                ) : (
+                                    <button 
+                                        disabled={blacklistButtonDisabled} 
+                                        className={`${blacklistButtonDisabled ? 'disabled' : ''}`}
+                                        onClick={() => handleAddShopToBlacklist(shop.id)}
+                                    >
+                                        Add to blacklist
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </Popup>
                 </Marker>

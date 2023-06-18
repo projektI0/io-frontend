@@ -1,0 +1,40 @@
+.shop-info {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.shop-info h2 {
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.shop-info p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.shop-info div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.shop-info div button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.shop-info div button:hover {
+  background-color: #333;
+}
+
+.shop-info div button:disabled {
+  background-color: #ccc;
+}

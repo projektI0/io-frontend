@@ -38,7 +38,7 @@ const AddList = (props: AddListProps) => {
                             <p className="my-4 text-slate-500 text-lg leading-relaxed">
                                 To add new list, please enter the name of the list below.
                             </p>
-                            <input type={"text"} onChange={handleInputChange}/>
+                            <input type={"text"} maxLength={30} onChange={handleInputChange}/>
                         </div>
                         {/*footer*/}
                         <div

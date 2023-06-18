@@ -18,7 +18,6 @@ const API_URL: string = import.meta.env.VITE_API_URL;
 const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     const activeListId = useAppSelector(state => state.lists.activeList?.id ?? -1);
     const [path, setPath] = useState<PathResponse | null>(null);
-    const [search, setSearch] = useState<string>("");
     const [showPath, setShowPath] = useState<boolean>(false);
     const [selectedRouteType, setSelectedRouteType] = useState<string>("shortestPath");
     const [showStops, setShowStops] = useState<boolean>(false);
@@ -106,6 +105,18 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
         setSearch(value);
     };
 
+    const handleShowStops = () => {
+        setShowStops(true);
+    }
+
+    const handleHideStops = () => {
+        setShowStops(false);
+    }
+
+    const handleChangeType = () => {
+        // TODO: Change type of path
+    };
+
     if (!userLocation) {
         return (
             <div className="error-message container flex flex-col">
@@ -115,18 +126,8 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     }
 
     return (
-        <div className="flex flex-col items-center py-4 px-8 justify-around font-body">
-            <div className="mb-4 w-5/6 flex justify-center items-center">
-                <input
-                    type="text"
-                    id="search"
-                    name="search"
-                    value={search}
-                    placeholder="Search for a shop"
-                    className={"border-secondary border-2"}
-                    onChange={handleSearchInputChange}/>
-            </div>
-            <div className="map-stops-container lg:min-h-[50%] mb-6">
+        <div className="flex flex-col items-center py-4 px-4 justify-around font-body">
+            <div className="map-stops-container lg:min-h-[50%] mb-6 py-3">
                 <MapContainer
                     className="map"
                     style={{

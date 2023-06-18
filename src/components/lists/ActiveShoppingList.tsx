@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
 import EmptyListMessage from "./EmptyListMessage";
 import {
@@ -79,9 +79,29 @@ const ActiveShoppingList = () => {
 
     return (
         <div className="flex flex-col items-center w-5/6 md:w-4/6 lg:w-1/2 mx-auto">
-            <h1 className="p-10 text-2xl text-primary font-bold">
-                Active list
-            </h1>
+            <div className="flex justify-center items-center">
+                <h1 className="p-10 text-2xl text-primary font-bold">
+                    Active list
+                </h1>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-8 h-8 justify-self-end text-primary hover:opacity-50 hover:cursor-pointer"
+                    data-tooltip-id="intro"
+                    data-tooltip-content="For app usage tutorial visit your profile :)"
+                    data-tooltip-place="bottom"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+                    />
+                </svg>
+                <Tooltip id="intro" />
+            </div>
             <ul className={"flex flex-col w-full "}>
                 {listProducts.length === 0 ? (
                     <EmptyListMessage/>

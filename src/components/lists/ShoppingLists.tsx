@@ -116,7 +116,7 @@ const ShoppingLists = () => {
                                       data-tooltip-id="see-list-details"
                                       data-tooltip-content="See list details"
                                       data-tooltip-place="top">
-                                    {list.name}
+                                    {list.name.substring(0, 30)}
                                 </Link>
                                 <Tooltip id="see-list-details"/>
                             </div>

@@ -1,4 +1,4 @@
-import {Tag} from "../../map/types/types";
+import {Tag} from "../map/types/types";
 
 export interface ProductFormData {
     name: string;

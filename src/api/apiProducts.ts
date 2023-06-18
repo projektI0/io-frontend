@@ -1,7 +1,15 @@
 import {api} from "./api";
 import {ShoppingListView} from "../components/lists/types";
-import type { AddShoppingListProduct, DeleteShoppingListProduct, FilteredProducts, GetProductsWithFilter, GetShoppingListProducts, UpdateShoppingListProduct } from "./types";
-import { Tag } from "../components/map/types/types";
+import type {
+    AddShoppingListProduct,
+    DeleteShoppingListProduct,
+    FilteredProducts,
+    GetProductsWithFilter,
+    GetShoppingListProducts,
+    UpdateShoppingListProduct
+} from "./types";
+import {Tag} from "../components/map/types/types";
+import {Product, Recipe} from "../components/products/types";
 
 export const apiProducts = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -57,6 +65,22 @@ export const apiProducts = api.injectEndpoints({
                 }
             },
             invalidatesTags: ['ProductList']
+        }),
+        getAllProducts: builder.query<Product[], void>({
+            query: () => ({
+                url: `/products`,
+                method: 'GET',
+            })
+        }),
+        getRecipesWithFilter: builder.mutation<Recipe[], GetProductsWithFilter>({
+            query: (args) => {
+                return {
+                    url: `/recipes/filter`,
+                    method: 'POST',
+                    body: args,
+                }
+            },
+            invalidatesTags: ['ProductList']
         })
     }),
 });
@@ -67,5 +91,7 @@ export const {
     useUpdateShoppingListProductMutation,
     useDeleteShoppingListProductMutation,
     useGetAllTagsQuery,
-    useGetProductsWithFilterMutation
+    useGetProductsWithFilterMutation,
+    useGetAllProductsQuery,
+    useGetRecipesWithFilterMutation
 } = apiProducts;

@@ -110,13 +110,8 @@
 }
 
 .map-buttons button {
-  padding: 10px;
   background-color: #423bc8;
   color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 20px;
 }
 
 .map-buttons button:hover {
@@ -124,7 +119,7 @@
 }
 
 .map-buttons button.disabled {
-  background-color: #a4a4a4;
+  background-color: #9CA3AF;
   cursor: not-allowed;
 }
 

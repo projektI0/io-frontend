@@ -68,7 +68,7 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
             }).addTo(map);
         }
         setRouteControl(routeControl);
-    }, [map, showPath]);
+    }, [map, showPath, shopsPath]);
 
     useEffect(() => {
         // Remove route control when showPath becomes false

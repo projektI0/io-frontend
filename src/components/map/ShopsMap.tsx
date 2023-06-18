@@ -100,23 +100,6 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
         toggleButtons();
     }
 
-    const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {value} = event.target;
-        setSearch(value);
-    };
-
-    const handleShowStops = () => {
-        setShowStops(true);
-    }
-
-    const handleHideStops = () => {
-        setShowStops(false);
-    }
-
-    const handleChangeType = () => {
-        // TODO: Change type of path
-    };
-
     if (!userLocation) {
         return (
             <div className="error-message container flex flex-col">

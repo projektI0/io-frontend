@@ -155,20 +155,24 @@ const ShopsMapContent = ({userLocation, shopsPath, showPath}: ShopsMapContentPro
                 </Marker>
             }
             {shops && shops.map(shop => (
-                <Marker 
-                    key={shop.id} 
+                ((showPath && shopsPath?.includes(shop)) || !showPath) && <Marker
+                    key={shop.id}
                     position={[shop.latitude, shop.longitude]}
-                    icon={shop.blacklist ? 
+                    icon={shop.blacklist ?
                         new L.Icon({
                             iconSize: [32, 32],
                             iconUrl:
-                            "src/components/map/icons/blackIcon.png",
-                        }) :
-                        new L.Icon({
-                            iconSize: [32, 32],
-                            iconUrl:
-                            "src/components/map/icons/redIcon.png",
-                        })
+                                "src/components/map/icons/blackIcon.png",
+                        }) : shop.user ?
+                            new L.Icon({
+                                iconSize: [32, 32],
+                                iconUrl:
+                                    "src/components/map/icons/goldIcon.png",
+                            }) : new L.Icon({
+                                iconSize: [32, 32],
+                                iconUrl:
+                                    "src/components/map/icons/redIcon.png",
+                            })
                     }
                 >
                     <Popup position={[shop.latitude, shop.longitude]} closeButton={true} closeOnClick={false}>

@@ -15,6 +15,7 @@ export interface Shop {
     latitude: number;
     longitude: number;
     address: string;
+    user: boolean;
     blacklist: boolean
 }
 

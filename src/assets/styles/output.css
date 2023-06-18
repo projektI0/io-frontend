@@ -1397,7 +1397,7 @@ video {
 
 @media (min-width: 1024px){
   .lg\:min-h-\[50\%\]{
-    min-height: 50%;
+    min-height: 75%;
   }
 
   .lg\:w-1\/2{

@@ -1,9 +1,8 @@
-import React from "react";
+import React, {useRef, useState} from "react";
 import "./ShopsMap.css"
 import ShopsMapContent from "./ShopsMapContent";
-import {useRef, useState} from "react";
 import {MapContainer, TileLayer} from "react-leaflet";
-import {PathRequest, PathResponse, ShowPathText, ShowStopsText} from './types/types';
+import {PathRequest, PathResponse, ShowPathText} from './types/types';
 import {LatLng} from "leaflet";
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
@@ -21,7 +20,6 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
     const [showPath, setShowPath] = useState<boolean>(false);
     const [selectedRouteType, setSelectedRouteType] = useState<string>("shortestPath");
     const [showStops, setShowStops] = useState<boolean>(false);
-    const [showStopsText, setShowStopsText] = useState<ShowStopsText>(ShowStopsText.Show);
     const [showPathText, setShowPathText] = useState<ShowPathText>(ShowPathText.Show);
     const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -39,7 +37,6 @@ const ShopsMap = ({userLocation}: { userLocation: LatLng | null }) => {
                 btnStops.current.classList.remove('disabled');
                 btnType.current.classList.remove('disabled');
             } else {
-                setShowStopsText(ShowStopsText.Show);
                 btnStops.current.classList.add('disabled');
                 btnType.current.classList.add('disabled');
             }

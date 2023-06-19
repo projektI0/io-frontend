@@ -68,7 +68,7 @@ export const apiProducts = api.injectEndpoints({
         }),
         getAllProducts: builder.query<Product[], void>({
             query: () => ({
-                url: `/products`,
+                url: `/products?limit=200`,
                 method: 'GET',
             })
         }),
